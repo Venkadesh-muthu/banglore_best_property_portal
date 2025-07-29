@@ -1,0 +1,215 @@
+DEBUG - 2025-06-24 03:01:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 03:01:13 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 03:01:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2025-06-24 03:01:16 --> Error connecting to the database: mysqli_sql_exception: No such file or directory in /var/www/html/banglore_best_property_portal/system/Database/MySQLi/Connection.php:203
+Stack trace:
+#0 /var/www/html/banglore_best_property_portal/system/Database/MySQLi/Connection.php(203): mysqli->real_connect()
+#1 /var/www/html/banglore_best_property_portal/system/Database/BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect()
+#2 /var/www/html/banglore_best_property_portal/system/Database/BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#3 /var/www/html/banglore_best_property_portal/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#4 /var/www/html/banglore_best_property_portal/system/Model.php(330): CodeIgniter\Database\BaseBuilder->get()
+#5 /var/www/html/banglore_best_property_portal/system/BaseModel.php(717): CodeIgniter\Model->doFirst()
+#6 /var/www/html/banglore_best_property_portal/app/Controllers/AdminController.php(75): CodeIgniter\BaseModel->first()
+#7 /var/www/html/banglore_best_property_portal/system/CodeIgniter.php(933): App\Controllers\AdminController->login()
+#8 /var/www/html/banglore_best_property_portal/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController()
+#9 /var/www/html/banglore_best_property_portal/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+#10 /var/www/html/banglore_best_property_portal/system/Boot.php(334): CodeIgniter\CodeIgniter->run()
+#11 /var/www/html/banglore_best_property_portal/system/Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+#12 /var/www/html/banglore_best_property_portal/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#13 /var/www/html/banglore_best_property_portal/system/rewrite.php(44): require_once('...')
+#14 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No such file or directory in /var/www/html/banglore_best_property_portal/system/Database/MySQLi/Connection.php:250
+Stack trace:
+#0 /var/www/html/banglore_best_property_portal/system/Database/BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect()
+#1 /var/www/html/banglore_best_property_portal/system/Database/BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#2 /var/www/html/banglore_best_property_portal/system/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+#3 /var/www/html/banglore_best_property_portal/system/Model.php(330): CodeIgniter\Database\BaseBuilder->get()
+#4 /var/www/html/banglore_best_property_portal/system/BaseModel.php(717): CodeIgniter\Model->doFirst()
+#5 /var/www/html/banglore_best_property_portal/app/Controllers/AdminController.php(75): CodeIgniter\BaseModel->first()
+#6 /var/www/html/banglore_best_property_portal/system/CodeIgniter.php(933): App\Controllers\AdminController->login()
+#7 /var/www/html/banglore_best_property_portal/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController()
+#8 /var/www/html/banglore_best_property_portal/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+#9 /var/www/html/banglore_best_property_portal/system/Boot.php(334): CodeIgniter\CodeIgniter->run()
+#10 /var/www/html/banglore_best_property_portal/system/Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+#11 /var/www/html/banglore_best_property_portal/public/index.php(59): CodeIgniter\Boot::bootWeb()
+#12 /var/www/html/banglore_best_property_portal/system/rewrite.php(44): require_once('...')
+#13 {main}
+CRITICAL - 2025-06-24 03:01:16 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: No such file or directory
+[Method: POST, Route: admin/login]
+in SYSTEMPATH/Database/BaseConnection.php on line 467.
+ 1 SYSTEMPATH/Database/BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH/Database/BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query()
+ 3 SYSTEMPATH/Model.php(330): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH/BaseModel.php(717): CodeIgniter\Model->doFirst()
+ 5 APPPATH/Controllers/AdminController.php(75): CodeIgniter\BaseModel->first()
+ 6 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\AdminController->login()
+ 7 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController()
+ 8 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest()
+ 9 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter()
+11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+12 SYSTEMPATH/rewrite.php(44): require_once('/var/www/html/banglore_best_property_portal/public/index.php')
+DEBUG - 2025-06-24 03:04:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 03:04:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 03:04:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 03:04:38 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 03:05:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 03:05:19 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 03:05:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 03:05:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 03:05:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 03:05:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 03:20:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 03:20:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 03:20:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 03:20:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 03:20:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2025-06-24 03:20:49 --> [DEPRECATED] pathinfo(): Passing null to parameter #1 ($path) of type string is deprecated in APPPATH/Views/property_details.php on line 630.
+ 1 APPPATH/Views/property_details.php(630): pathinfo(null, 4)
+ 2 SYSTEMPATH/View/View.php(224): include('/var/www/html/banglore_best_property_portal/app/Views/property_details.php')
+ 3 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render('property_details', [], true)
+ 5 APPPATH/Views/layout/templates.php(4): view('property_details')
+ 6 SYSTEMPATH/View/View.php(224): include('/var/www/html/banglore_best_property_portal/app/Views/layout/templates.php')
+ 7 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render('layout/templates', [], true)
+ 9 APPPATH/Controllers/MainController.php(330): view('layout/templates', [...])
+10 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\MainController->propertyDetails('114')
+11 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MainController))
+12 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+16 SYSTEMPATH/rewrite.php(44): require_once('/var/www/html/banglore_best_property_portal/public/index.php')
+WARNING - 2025-06-24 03:21:20 --> [DEPRECATED] pathinfo(): Passing null to parameter #1 ($path) of type string is deprecated in APPPATH/Views/property_details.php on line 630.
+ 1 APPPATH/Views/property_details.php(630): pathinfo(null, 4)
+ 2 SYSTEMPATH/View/View.php(224): include('/var/www/html/banglore_best_property_portal/app/Views/property_details.php')
+ 3 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render('property_details', [], true)
+ 5 APPPATH/Views/layout/templates.php(4): view('property_details')
+ 6 SYSTEMPATH/View/View.php(224): include('/var/www/html/banglore_best_property_portal/app/Views/layout/templates.php')
+ 7 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render('layout/templates', [], true)
+ 9 APPPATH/Controllers/MainController.php(330): view('layout/templates', [...])
+10 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\MainController->propertyDetails('114')
+11 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MainController))
+12 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+16 SYSTEMPATH/rewrite.php(44): require_once('/var/www/html/banglore_best_property_portal/public/index.php')
+WARNING - 2025-06-24 06:06:56 --> [DEPRECATED] pathinfo(): Passing null to parameter #1 ($path) of type string is deprecated in APPPATH/Views/property_details.php on line 630.
+ 1 APPPATH/Views/property_details.php(630): pathinfo(null, 4)
+ 2 SYSTEMPATH/View/View.php(224): include('/var/www/html/banglore_best_property_portal/app/Views/property_details.php')
+ 3 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render('property_details', [], true)
+ 5 APPPATH/Views/layout/templates.php(4): view('property_details')
+ 6 SYSTEMPATH/View/View.php(224): include('/var/www/html/banglore_best_property_portal/app/Views/layout/templates.php')
+ 7 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render('layout/templates', [], true)
+ 9 APPPATH/Controllers/MainController.php(330): view('layout/templates', [...])
+10 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\MainController->propertyDetails('114')
+11 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MainController))
+12 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+16 SYSTEMPATH/rewrite.php(44): require_once('/var/www/html/banglore_best_property_portal/public/index.php')
+WARNING - 2025-06-24 06:07:30 --> [DEPRECATED] pathinfo(): Passing null to parameter #1 ($path) of type string is deprecated in APPPATH/Views/property_details.php on line 630.
+ 1 APPPATH/Views/property_details.php(630): pathinfo(null, 4)
+ 2 SYSTEMPATH/View/View.php(224): include('/var/www/html/banglore_best_property_portal/app/Views/property_details.php')
+ 3 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render('property_details', [], true)
+ 5 APPPATH/Views/layout/templates.php(4): view('property_details')
+ 6 SYSTEMPATH/View/View.php(224): include('/var/www/html/banglore_best_property_portal/app/Views/layout/templates.php')
+ 7 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render('layout/templates', [], true)
+ 9 APPPATH/Controllers/MainController.php(330): view('layout/templates', [...])
+10 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\MainController->propertyDetails('114')
+11 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MainController))
+12 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+16 SYSTEMPATH/rewrite.php(44): require_once('/var/www/html/banglore_best_property_portal/public/index.php')
+WARNING - 2025-06-24 06:11:39 --> [DEPRECATED] pathinfo(): Passing null to parameter #1 ($path) of type string is deprecated in APPPATH/Views/property_details.php on line 625.
+ 1 APPPATH/Views/property_details.php(625): pathinfo(null, 4)
+ 2 SYSTEMPATH/View/View.php(224): include('/var/www/html/banglore_best_property_portal/app/Views/property_details.php')
+ 3 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render('property_details', [], true)
+ 5 APPPATH/Views/layout/templates.php(4): view('property_details')
+ 6 SYSTEMPATH/View/View.php(224): include('/var/www/html/banglore_best_property_portal/app/Views/layout/templates.php')
+ 7 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render('layout/templates', [], true)
+ 9 APPPATH/Controllers/MainController.php(330): view('layout/templates', [...])
+10 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\MainController->propertyDetails('114')
+11 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MainController))
+12 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+16 SYSTEMPATH/rewrite.php(44): require_once('/var/www/html/banglore_best_property_portal/public/index.php')
+WARNING - 2025-06-24 06:12:29 --> [DEPRECATED] pathinfo(): Passing null to parameter #1 ($path) of type string is deprecated in APPPATH/Views/property_details.php on line 630.
+ 1 APPPATH/Views/property_details.php(630): pathinfo(null, 4)
+ 2 SYSTEMPATH/View/View.php(224): include('/var/www/html/banglore_best_property_portal/app/Views/property_details.php')
+ 3 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render('property_details', [], true)
+ 5 APPPATH/Views/layout/templates.php(4): view('property_details')
+ 6 SYSTEMPATH/View/View.php(224): include('/var/www/html/banglore_best_property_portal/app/Views/layout/templates.php')
+ 7 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render('layout/templates', [], true)
+ 9 APPPATH/Controllers/MainController.php(330): view('layout/templates', [...])
+10 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\MainController->propertyDetails('114')
+11 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MainController))
+12 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+16 SYSTEMPATH/rewrite.php(44): require_once('/var/www/html/banglore_best_property_portal/public/index.php')
+WARNING - 2025-06-24 06:13:04 --> [DEPRECATED] pathinfo(): Passing null to parameter #1 ($path) of type string is deprecated in APPPATH/Views/property_details.php on line 630.
+ 1 APPPATH/Views/property_details.php(630): pathinfo(null, 4)
+ 2 SYSTEMPATH/View/View.php(224): include('/var/www/html/banglore_best_property_portal/app/Views/property_details.php')
+ 3 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render('property_details', [], true)
+ 5 APPPATH/Views/layout/templates.php(4): view('property_details')
+ 6 SYSTEMPATH/View/View.php(224): include('/var/www/html/banglore_best_property_portal/app/Views/layout/templates.php')
+ 7 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render('layout/templates', [], true)
+ 9 APPPATH/Controllers/MainController.php(330): view('layout/templates', [...])
+10 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\MainController->propertyDetails('114')
+11 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MainController))
+12 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+16 SYSTEMPATH/rewrite.php(44): require_once('/var/www/html/banglore_best_property_portal/public/index.php')
+DEBUG - 2025-06-24 06:27:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 06:27:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 06:28:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 06:28:37 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 06:28:39 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 06:29:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+WARNING - 2025-06-24 06:33:06 --> [DEPRECATED] pathinfo(): Passing null to parameter #1 ($path) of type string is deprecated in APPPATH/Views/property_details.php on line 630.
+ 1 APPPATH/Views/property_details.php(630): pathinfo(null, 4)
+ 2 SYSTEMPATH/View/View.php(224): include('/var/www/html/banglore_best_property_portal/app/Views/property_details.php')
+ 3 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render('property_details', [], true)
+ 5 APPPATH/Views/layout/templates.php(4): view('property_details')
+ 6 SYSTEMPATH/View/View.php(224): include('/var/www/html/banglore_best_property_portal/app/Views/layout/templates.php')
+ 7 SYSTEMPATH/View/View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH/Common.php(1173): CodeIgniter\View\View->render('layout/templates', [], true)
+ 9 APPPATH/Controllers/MainController.php(330): view('layout/templates', [...])
+10 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\MainController->propertyDetails('114')
+11 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MainController))
+12 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+16 SYSTEMPATH/rewrite.php(44): require_once('/var/www/html/banglore_best_property_portal/public/index.php')
+DEBUG - 2025-06-24 06:40:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 06:40:18 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 06:40:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 07:31:27 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-24 07:31:30 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
