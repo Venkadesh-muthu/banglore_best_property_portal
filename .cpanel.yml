@@ -1,1 +1,4 @@
 
+deployment:
+  tasks:
+    - /bin/cp -r * ../banglore_property_portal/
