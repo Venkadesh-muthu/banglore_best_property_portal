@@ -107,20 +107,20 @@
                     <a href="<?php echo base_url() ?>" class="logo m-0 float-start">Property</a>
 
                     <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
-                        <li class="active"><a href="/">Home</a></li>
+                        <li class="active"><a href="<?php echo base_url() ?>">Home</a></li>
                         <li class="has-children">
                             <a href="properties">Properties</a>
                             <ul class="dropdown">
-                                <li><a href="#">Buy Property</a></li>
-                                <li><a href="#">Sell Property</a></li>
-                                <li class="has-children">
+                                <li><a href="#">Search & filter Properties</a></li>
+                                <li><a href="#">compare properties  </a></li>
+                                <!-- <li class="has-children">
                                     <a href="#">Dropdown</a>
                                     <ul class="dropdown">
                                         <li><a href="#">Sub Menu One</a></li>
                                         <li><a href="#">Sub Menu Two</a></li>
                                         <li><a href="#">Sub Menu Three</a></li>
                                     </ul>
-                                </li>
+                                </li> -->
                             </ul>
                         </li>
                         <li><a href="services">Services</a></li>
