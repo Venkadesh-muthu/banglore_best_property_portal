@@ -1,4 +1,4 @@
-
 deployment:
   tasks:
-    - /bin/cp -r * ../banglore_property_portal/
+    - export COMPOSER_ALLOW_SUPERUSER=1
+    - /bin/cp -R * ../banglore_property_portal/
