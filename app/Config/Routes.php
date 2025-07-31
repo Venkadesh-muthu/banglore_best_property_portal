@@ -10,6 +10,10 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'MainController::index');
 $routes->get('properties', 'MainController::properties');
 $routes->get('property_details/(:num)', 'MainController::propertyDetails/$1');
+$routes->get('property/search', 'MainController::search');
+$routes->get('compare_properties', 'MainController::compareProperties');
+$routes->get('services/(:segment)', 'MainController::serviceDetail/$1');
+
 
 $routes->get('services', 'MainController::services');
 $routes->get('about', 'MainController::about');
@@ -37,12 +41,10 @@ $routes->group('admin', function ($routes) {
     $routes->get('developer/edit/(:num)', 'AdminController::edit_developer/$1');
     $routes->post('update-developer/(:num)', 'AdminController::update_developer/$1');
     $routes->delete('developer/delete/(:num)', 'AdminController::delete_developer/$1');
-
-
-
-
+    $routes->get('services', 'AdminController::services');
+    $routes->get('add-service', 'AdminController::addService');
+    $routes->post('save-service', 'AdminController::saveService');
+    $routes->get('edit-service/(:num)', 'AdminController::editService/$1');
+    $routes->post('update-service/(:num)', 'AdminController::updateService/$1');
+    $routes->delete('delete-service/(:num)', 'AdminController::deleteService/$1');
 });
-
-
-
-

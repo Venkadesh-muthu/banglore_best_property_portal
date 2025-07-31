@@ -15,6 +15,7 @@ use App\Models\PropertySpecificationsModel;
 use App\Models\MicroMarketDocumentModel;
 use App\Models\MicroMarketSectionModel;
 use App\Models\DeveloperModel;
+use App\Models\ServiceModel;
 use CodeIgniter\Controller;
 
 class AdminController extends BaseController
@@ -32,6 +33,7 @@ class AdminController extends BaseController
     protected $microMarketDocumentModel;
     protected $microMarketSectionModel;
     protected $developerModel;
+    protected $serviceModel;
 
     public function __construct()
     {
@@ -48,6 +50,7 @@ class AdminController extends BaseController
         $this->microMarketDocumentModel = new MicroMarketDocumentModel();
         $this->microMarketSectionModel = new MicroMarketSectionModel();
         $this->developerModel = new DeveloperModel();
+        $this->serviceModel = new ServiceModel();
 
     }
 
@@ -830,8 +833,9 @@ class AdminController extends BaseController
 
         if ($image) {
             $imagePath = FCPATH . 'admin-template/uploads/properties/' . $image['image'];
-            if (is_file($imagePath))
+            if (is_file($imagePath)) {
                 unlink($imagePath);
+            }
 
             $this->propertyImageModel->delete($imageId);
         }
@@ -1203,5 +1207,188 @@ class AdminController extends BaseController
             return $this->response->setJSON(['success' => 'Developer deleted successfully']);
         }
     }
+    // 1. Show All Services
+    public function services()
+    {
+        $user = session()->get(); // Assuming you store username in session
+        $services = $this->serviceModel->findAll();
+
+        $data = [
+            'title' => 'Services',
+            'name' => $user['username'] ?? 'Admin',
+            'services' => $services,
+            'content' => 'admin/services',
+        ];
+        return view('admin/layout/templates', $data);
+    }
+
+    // 2. Add Service Form
+    public function addService()
+    {
+        $user = session()->get();
+
+        $data = [
+            'title' => 'Add Service',
+            'name' => $user['username'] ?? 'Admin',
+            'content' => 'admin/add_service',
+        ];
+        return view('admin/layout/templates', $data);
+    }
+
+    // 3. Insert New Service
+    public function saveService()
+    {
+        $validation = \Config\Services::validation();
+
+        $rules = [
+            'icon' => 'uploaded[icon]|is_image[icon]|max_size[icon,1024]',
+            'title' => 'required',
+            'slug' => 'required|is_unique[services.slug]',
+            'short_description' => 'required',
+            'long_description' => 'required',
+            'meta_title' => 'required',
+            'meta_description' => 'required',
+            'meta_keywords' => 'required',
+            'status' => 'required|in_list[0,1]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', $validation->listErrors());
+        }
+
+        // Handle icon
+        $iconFile = $this->request->getFile('icon');
+        $iconName = '';
+        if ($iconFile && $iconFile->isValid() && !$iconFile->hasMoved()) {
+            $iconName = $iconFile->getRandomName();
+            $iconFile->move('uploads/icons/', $iconName);
+        }
+
+        // Handle main image
+        $img = $this->request->getFile('image');
+        $imageName = '';
+        if ($img && $img->isValid() && !$img->hasMoved()) {
+            $imageName = $img->getRandomName();
+            $img->move('uploads/services/', $imageName);
+        }
+
+        $this->serviceModel->save([
+            'icon' => $iconName,
+            'title' => $this->request->getPost('title'),
+            'slug' => $this->request->getPost('slug'),
+            'short_description' => $this->request->getPost('short_description'), // or 'description'
+            'long_description' => $this->request->getPost('long_description'),
+            'image' => $imageName,
+            'meta_title' => $this->request->getPost('meta_title'),
+            'meta_description' => $this->request->getPost('meta_description'),
+            'meta_keywords' => $this->request->getPost('meta_keywords'),
+            'status' => $this->request->getPost('status'),
+        ]);
+
+        return redirect()->to('admin/services')->with('success', 'Service added successfully');
+    }
+
+
+    // 4. Edit Service Form
+    public function editService($id)
+    {
+        $user = session()->get();
+        $service = $this->serviceModel->find($id);
+
+        if (!$service) {
+            return redirect()->to('admin/services')->with('error', 'Service not found');
+        }
+
+        $data = [
+            'title' => 'Edit Service',
+            'name' => $user['username'] ?? 'Admin',
+            'service' => $service,
+            'content' => 'admin/edit_service',
+        ];
+        return view('admin/layout/templates', $data);
+    }
+
+    // 5. Update Service
+    public function updateService($id)
+    {
+        $validation = \Config\Services::validation();
+
+        $rules = [
+            'title' => 'required',
+            'slug' => 'required',
+            'short_description' => 'required',
+            'long_description' => 'required',
+            'meta_title' => 'required',
+            'meta_description' => 'required',
+            'meta_keywords' => 'required',
+            'status' => 'required|in_list[0,1]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', $validation->listErrors());
+        }
+
+        $service = $this->serviceModel->find($id);
+
+        // Handle icon upload
+        $iconFile = $this->request->getFile('icon');
+        $iconName = $service['icon'] ?? '';
+
+        if ($iconFile && $iconFile->isValid() && !$iconFile->hasMoved()) {
+            if (!empty($iconName) && file_exists('uploads/icons/' . $iconName)) {
+                unlink('uploads/icons/' . $iconName);
+            }
+            $iconName = $iconFile->getRandomName();
+            $iconFile->move('uploads/icons/', $iconName);
+        }
+
+        // Handle main image upload
+        $img = $this->request->getFile('image');
+        $imageName = $service['image'] ?? '';
+
+        if ($img && $img->isValid() && !$img->hasMoved()) {
+            if (!empty($imageName) && file_exists('uploads/services/' . $imageName)) {
+                unlink('uploads/services/' . $imageName);
+            }
+            $imageName = $img->getRandomName();
+            $img->move('uploads/services/', $imageName);
+        }
+
+        $this->serviceModel->update($id, [
+            'icon' => $iconName,
+            'title' => $this->request->getPost('title'),
+            'slug' => $this->request->getPost('slug'),
+            'description' => $this->request->getPost('description'),
+            'short_description' => $this->request->getPost('short_description'),
+            'long_description' => $this->request->getPost('long_description'),
+            'image' => $imageName,
+            'meta_title' => $this->request->getPost('meta_title'),
+            'meta_description' => $this->request->getPost('meta_description'),
+            'meta_keywords' => $this->request->getPost('meta_keywords'),
+            'status' => $this->request->getPost('status'),
+        ]);
+
+        return redirect()->to('admin/services')->with('success', 'Service updated successfully');
+    }
+
+
+    // 6. Delete Service
+    public function deleteService($id)
+    {
+        $service = $this->serviceModel->find($id);
+
+        if (!$service) {
+            return $this->response->setJSON(['error' => 'Service not found']);
+        }
+
+        if (!empty($service['image']) && file_exists('uploads/services/' . $service['image'])) {
+            unlink('uploads/services/' . $service['image']);
+        }
+
+        $this->serviceModel->delete($id);
+
+        return $this->response->setJSON(['success' => true]);
+    }
+
 
 }

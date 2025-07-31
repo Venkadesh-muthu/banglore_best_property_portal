@@ -109,10 +109,10 @@
                     <ul class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
                         <li class="active"><a href="<?php echo base_url() ?>">Home</a></li>
                         <li class="has-children">
-                            <a href="properties">Properties</a>
+                            <a href="<?php echo base_url() ?>properties">Properties</a>
                             <ul class="dropdown">
-                                <li><a href="#">Search & filter Properties</a></li>
-                                <li><a href="#">compare properties  </a></li>
+                                <li><a href="<?php echo base_url() ?>properties">Search & filter Properties</a></li>
+                                <li><a href="<?php echo base_url() ?>compare_properties">compare properties  </a></li>
                                 <!-- <li class="has-children">
                                     <a href="#">Dropdown</a>
                                     <ul class="dropdown">
@@ -123,7 +123,20 @@
                                 </li> -->
                             </ul>
                         </li>
-                        <li><a href="services">Services</a></li>
+                        <li class="has-children">
+                            <a class="nav-link" href="#">Services</a>
+                            <ul class="dropdown">
+                                <?php if (!empty($services)): ?>
+                                    <?php foreach ($services as $service): ?>
+                                        <li>
+                                            <a class="dropdown-item" href="<?= base_url('services/' . esc($service['slug'])) ?>">
+                                                <i class="<?= esc($service['icon']) ?> me-1"></i> <?= esc($service['title']) ?>
+                                            </a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </ul>
+                        </li>
                         <li><a href="about">About</a></li>
                         <li><a href="contact_us">Contact Us</a></li>
                     </ul>

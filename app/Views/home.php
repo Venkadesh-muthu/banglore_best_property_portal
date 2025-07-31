@@ -1,3 +1,27 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+    .property-card img {
+        transition: transform 0.4s ease;
+    }
+
+    .property-card:hover img {
+        transform: scale(1.08);
+    }
+
+    .property-card {
+        transition: transform 0.3s ease;
+    }
+
+    .property-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 18px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-link {
+        text-decoration: none;
+        color: inherit;
+    }
+</style>
 <div class="hero">
     <div class="hero-slide">
         <div class="img overlay" style="background-image: url('images/hero_bg_3.jpg')"></div>
@@ -32,54 +56,74 @@
             </div>
             <div class="col-lg-6 text-lg-end">
                 <p>
-                    <a href="properties" target="_blank" class="btn btn-primary text-white py-3 px-4">View all
+                    <a href="<?php echo base_url() ?>properties" target="_blank" class="btn btn-primary text-white py-3 px-4">View all
                         properties</a>
                 </p>
             </div>
         </div>
-
         <div class="row">
-            <div class="col-12">
-                <div class="property-slider-wrap">
-                    <div class="property-slider">
-                        <?php foreach ($properties as $property): ?>
-                            <div class="property-item">
-                                <a href="<?= base_url('property_details/' . $property['id']) ?>" class="img d-block">
-                                    <img src="<?= base_url('uploads/properties/' . $property['image']) ?>"
-                                        class="img-fluid rounded-top" alt="<?= esc($property['name']) ?>" />
-                                </a>
-                                <div class="property-content p-3">
-                                    <div class="price mb-2">
-                                        <span>₹<?= number_format((float) $property['start_price']) ?> -
-                                            ₹<?= number_format((float) $property['end_price']) ?></span>
+            <?php foreach ($properties as $property): ?>
+                <div class="col-12 col-sm-6 col-md-4 mb-4 d-flex">
+                    <a href="<?= base_url('property_details/' . $property['id']) ?>" class="card-link w-100">
+                        <div class="card property-card shadow-sm border-0 h-100" style="border-radius: 14px; overflow: hidden;">
+                            
+                            <!-- Image with Overlay -->
+                            <div style="position: relative; height: 230px; overflow: hidden;">
+                                <img src="<?= base_url('uploads/properties/' . ($property['image'] ?? 'default.jpg')) ?>"
+                                    alt="<?= esc($property['name']) ?>"
+                                    class="w-100 h-100"
+                                    style="object-fit: cover;">
+
+                                <div style="
+                                    position: absolute;
+                                    top: 0;
+                                    left: 0;
+                                    right: 0;
+                                    padding: 10px 14px;
+                                    background: rgba(0, 0, 0, 0.55);
+                                    color: #fff;
+                                    font-size: 13px;
+                                ">
+                                    <div class="d-flex justify-content-between">
+                                        <strong><?= esc($property['name']) ?></strong>
+                                        <span>
+                                            ₹<?= number_format($property['start_price']) ?> - 
+                                            ₹<?= number_format($property['end_price']) ?> Cr
+                                        </span>
                                     </div>
-                                    <h5 class="mb-1"><?= esc($property['name']) ?></h5>
-                                    <p class="text-muted mb-1"><?= esc($property['location']) ?></p>
-                                    <p class="mb-1">
-                                        <strong>Type:</strong>
-                                        <?= esc($property['property_type']) ?>:
-                                        <span><?= esc($property['property_type_detail']) ?></span><br>
-                                        <strong>Possession:</strong> <?= esc($property['possession_date']) ?>
-                                    </p>
-                                    <a href="<?= base_url('property_details/' . $property['id']) ?>"
-                                        class="btn btn-sm btn-primary py-2 px-3">See Details</a>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
-                    </div>
 
-                    <!-- Slider Controls -->
-                    <div id="property-nav" class="controls mt-3 text-center" tabindex="0"
-                        aria-label="Carousel Navigation">
-                        <span class="prev btn btn-outline-dark btn-sm mx-1" data-controls="prev"
-                            aria-controls="property" tabindex="-1">Prev</span>
-                        <span class="next btn btn-outline-dark btn-sm mx-1" data-controls="next"
-                            aria-controls="property" tabindex="-1">Next</span>
-                    </div>
+                            <!-- Property Details -->
+                            <div class="card-body px-3 pt-2 pb-3 d-flex flex-column justify-content-between" style="font-size: 14px;">
+                                <!-- Location & Possession -->
+                                <div class="d-flex justify-content-between mb-2 text-muted flex-wrap">
+                                    <span><i class="bi bi-geo-alt-fill me-1"></i><?= esc($property['location']) ?></span>
+                                    <span><i class="bi bi-calendar-event me-1"></i><?= esc($property['possession_date']) ?></span>
+                                </div>
+
+                                <!-- Type & Sqft -->
+                                <div class="d-flex justify-content-between flex-wrap">
+                                    <span>
+                                        <i class="bi bi-building me-1"></i><?= esc($property['property_type']) ?>
+                                    </span>
+                                    <span>
+                                        <i class="bi bi-aspect-ratio me-1"></i>
+                                        <?php if (strtolower($property['property_type']) === 'plot'): ?>
+                                            <?= esc($property['property_type_detail']) ?> sqft
+                                        <?php else: ?>
+                                            <?= esc($property['property_type_detail']) ?>
+                                        <?php endif; ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </div>
+            <?php endforeach; ?>
         </div>
-    </div>
+
+
 </div>
 
 <section class="features-1">

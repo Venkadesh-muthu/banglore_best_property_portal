@@ -13,6 +13,7 @@ use App\Models\LegalApprovalModel;
 use App\Models\MicroMarketDocumentModel;
 use App\Models\MicroMarketSectionModel;
 use App\Models\DeveloperModel;
+use App\Models\ServiceModel;
 
 class MainController extends BaseController
 {
@@ -27,6 +28,7 @@ class MainController extends BaseController
     protected $microMarketDocumentModel;
     protected $microMarketSectionModel;
     protected $developerModel;
+    protected $serviceModel;
 
     public function __construct()
     {
@@ -41,12 +43,14 @@ class MainController extends BaseController
         $this->microMarketDocumentModel = new MicroMarketDocumentModel();
         $this->microMarketSectionModel = new MicroMarketSectionModel();
         $this->developerModel = new DeveloperModel();
+        $this->serviceModel = new ServiceModel();
     }
     public function index(): string
     {
-        $properties = $this->propertyModel->findAll();
-
-
+        $properties = $this->propertyModel
+                   ->orderBy('id', 'DESC') // Replace 'id' with 'created_at' if needed
+                   ->findAll(6);
+        $services = $this->serviceModel->where('status', 1)->findAll();
         foreach ($properties as &$property) {
             $image = $this->propertyImageModel
                 ->where('property_id', $property['id'])
@@ -59,6 +63,7 @@ class MainController extends BaseController
             'title' => 'Home',
             'content' => 'home',
             'properties' => $properties,
+            'services' => $services,
         ];
 
         return view('layout/templates', $data);
@@ -66,18 +71,86 @@ class MainController extends BaseController
 
     public function properties()
     {
-        $perPage = 3; // Number of properties per page
+        $perPage = 3;
         $currentPage = $this->request->getVar('page') ?? 1;
 
-        // Get total number of properties
-        $totalProperties = $this->propertyModel->countAll();
+        // Get all filters from GET parameters
+        $keyword     = $this->request->getGet('keyword');
+        $type        = $this->request->getGet('type');
+        $bhk         = $this->request->getGet('bhk');
+        $plot_area   = $this->request->getGet('plot_area');
+        $min_budget  = $this->request->getGet('min_budget');
+        $max_budget  = $this->request->getGet('max_budget');
 
-        // Get paginated properties
-        $properties = $this->propertyModel
+        // Start building the query
+        $builder = $this->propertyModel;
+
+        // Apply keyword search (name or location)
+        if (!empty($keyword)) {
+            $builder = $builder->groupStart()
+                ->like('name', $keyword)
+                ->orLike('location', $keyword)
+                ->groupEnd();
+        }
+
+        // Apply property type filter
+        if (!empty($type)) {
+            $builder = $builder->where('property_type', $type);
+
+            // If Apartment or Villa and BHK is selected
+            if (($type === 'Apartment' || $type === 'Villa') && !empty($bhk)) {
+                $bhk = str_replace(' ', '', $bhk); // Normalize input
+                $builder = $builder->like('property_type_detail', $bhk);
+            }
+
+            // If Plot and plot area is provided
+            if ($type === 'Plot' && !empty($plot_area)) {
+                $builder = $builder->where('property_type_detail', $plot_area);
+            }
+        }
+
+        // Budget filter
+        if (!empty($min_budget)) {
+            $builder->where("(start_price * 100000) >=", (int)$min_budget);
+        }
+
+        if (!empty($max_budget)) {
+            $builder->where("(end_price * 100000) <=", (int)$max_budget);
+        }
+
+        $sort_by = $this->request->getGet('sort_by');
+
+        // Sort conditions
+        switch ($sort_by) {
+            // case 'popularity':
+            //     $builder->orderBy('views', 'DESC'); // or your actual popularity column
+            //     break;
+
+            case 'possession_new':
+                $builder->orderBy('possession_date', 'DESC');
+                break;
+
+            case 'possession_old':
+                $builder->orderBy('possession_date', 'ASC');
+                break;
+
+            case 'price_high':
+                $builder->orderBy('(start_price * 100000)', 'DESC');
+                break;
+
+            case 'price_low':
+                $builder->orderBy('(start_price * 100000)', 'ASC');
+                break;
+        }
+
+
+
+        // Paginate the results
+        $properties = $builder
             ->orderBy('id', 'DESC')
-            ->paginate($perPage);
+            ->paginate($perPage, 'default', $currentPage);
 
-        // Attach one image per property
+        // Attach first image to each property
         foreach ($properties as &$property) {
             $image = $this->propertyImageModel
                 ->where('property_id', $property['id'])
@@ -85,12 +158,90 @@ class MainController extends BaseController
             $property['image'] = $image['image'] ?? 'default.jpg';
         }
 
+        // Fetch unique min and max budgets
+        $minBudgetsRaw = $this->propertyModel
+        ->select('start_price * 100000 AS price', false)
+        ->groupBy('start_price')
+        ->orderBy('start_price', 'ASC')
+        ->findAll();
+
+        $maxBudgetsRaw = $this->propertyModel
+            ->select('end_price * 100000 AS price', false)
+            ->groupBy('end_price')
+            ->orderBy('end_price', 'ASC')
+            ->findAll();
+
+
+        // Extract values into arrays and filter out zeros
+        $minBudgets = array_filter(array_map(fn ($row) => (int) $row['price'], $minBudgetsRaw));
+        $maxBudgets = array_filter(array_map(fn ($row) => (int) $row['price'], $maxBudgetsRaw));
+
+        $services = $this->serviceModel->where('status', 1)->findAll();
+        // Pass data to view
         $data = [
             'title' => 'Properties',
             'properties' => $properties,
             'pager' => $this->propertyModel->pager,
-            'content' => 'properties',
             'currentPage' => $currentPage,
+            'content' => 'properties',
+            'filters' => [
+                'keyword' => $keyword,
+                'type' => $type,
+                'bhk' => $bhk,
+                'plot_area' => $plot_area,
+                'min_budget' => $min_budget,
+                'max_budget' => $max_budget,
+                'sort_by' => $sort_by,
+            ],
+            'minBudgets' => $minBudgets,
+            'maxBudgets' => $maxBudgets,
+            'services' => $services,
+        ];
+
+
+        return view('layout/templates', $data);
+    }
+
+
+    public function search()
+    {
+        $q = $this->request->getGet('q');
+        if (strlen($q) < 3) {
+            return $this->response->setJSON([]);
+        }
+
+        $propertyModel = new \App\Models\PropertyModel();
+
+        $results = $propertyModel
+            ->like('name', $q)
+            ->orLike('location', $q)
+            ->select('id, name, location')
+            ->limit(10)
+            ->find();
+
+        return $this->response->setJSON($results);
+    }
+    public function compareProperties()
+    {
+        $allProperties = $this->propertyModel->findAll();
+
+        $property1 = null;
+        $property2 = null;
+
+        $id1 = $this->request->getGet('property1');
+        $id2 = $this->request->getGet('property2');
+
+        if ($id1 && $id2 && $id1 != $id2) {
+            $property1 = $this->propertyModel->find($id1);
+            $property2 = $this->propertyModel->find($id2);
+        }
+
+        $data = [
+            'title' => 'Compare Properties',
+            'content' => 'compare_properties',
+            'allProperties' => $allProperties,
+            'property1' => $property1,
+            'property2' => $property2,
         ];
 
         return view('layout/templates', $data);
@@ -334,12 +485,34 @@ class MainController extends BaseController
 
     public function services()
     {
+        $services = $this->serviceModel->where('status', 1)->findAll();
         $data = [
             'title' => 'Services',
             'content' => 'services',
+            'services' => $services,
         ];
         return view('layout/templates', $data);
     }
+    public function serviceDetail($slug)
+    {
+        $serviceModel = new \App\Models\ServiceModel();
+
+        $service = $serviceModel->where('slug', $slug)->where('status', 1)->first();
+        $services = $this->serviceModel->where('status', 1)->findAll();
+        if (!$service) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $data = [
+            'title' => $service['title'],
+            'service' => $service,
+            'services' => $services,
+            'content' => 'service_detail',
+        ];
+
+        return view('layout/templates', $data);
+    }
+
     public function about()
     {
         $data = [

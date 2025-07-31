@@ -21,6 +21,13 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link <?= ($title == 'Services') ? '' : 'collapsed' ?>"
+                href="<?= base_url('admin/services') ?>">
+                <i class="bi bi-ui-checks-grid"></i>
+                <span>Services</span>
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link <?= ($title == 'Developers') ? '' : 'collapsed' ?>"
                 href="<?= base_url('admin/developers') ?>">
                 <i class="bi bi-people"></i>

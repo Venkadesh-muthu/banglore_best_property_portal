@@ -205,7 +205,7 @@
     </div>
 </div>
 
-<div class="section sec-testimonials bg-light">
+<!-- <div class="section sec-testimonials bg-light">
     <div class="container">
         <div class="row mb-5 align-items-center">
             <div class="col-md-6">
@@ -349,4 +349,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
