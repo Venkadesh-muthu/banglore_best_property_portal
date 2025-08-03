@@ -28,6 +28,30 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link <?= in_array($title, ['About Us', 'Features', 'Team', 'Statistics']) ? '' : 'collapsed' ?>" data-bs-toggle="collapse" href="#aboutSubMenu" role="button" aria-expanded="false" aria-controls="aboutSubMenu">
+                <i class="bi bi-info-circle"></i>
+                <span>About Us</span>
+            </a>
+            <div class="collapse <?= in_array($title, ['About Us', 'Features', 'Team', 'Statistics']) ? 'show' : '' ?>" id="aboutSubMenu">
+                <ul class="nav flex-column ps-3">
+                    <li class="nav-item">
+                        <a class="nav-link <?= ($title == 'About Us') ? 'active' : '' ?>" href="<?= base_url('admin/about') ?>">About Section</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= ($title == 'Features') ? 'active' : '' ?>" href="<?= base_url('admin/features') ?>">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= ($title == 'Team') ? 'active' : '' ?>" href="<?= base_url('admin/team') ?>">Team Members</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= ($title == 'Statistics') ? 'active' : '' ?>" href="<?= base_url('admin/statistics') ?>">Statistics</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+
+        <li class="nav-item">
             <a class="nav-link <?= ($title == 'Developers') ? '' : 'collapsed' ?>"
                 href="<?= base_url('admin/developers') ?>">
                 <i class="bi bi-people"></i>

@@ -16,6 +16,10 @@ use App\Models\MicroMarketDocumentModel;
 use App\Models\MicroMarketSectionModel;
 use App\Models\DeveloperModel;
 use App\Models\ServiceModel;
+use App\Models\AboutModel;
+use App\Models\FeatureModel;
+use App\Models\TeamMemberModel;
+use App\Models\StatisticModel;
 use CodeIgniter\Controller;
 
 class AdminController extends BaseController
@@ -34,6 +38,10 @@ class AdminController extends BaseController
     protected $microMarketSectionModel;
     protected $developerModel;
     protected $serviceModel;
+    protected $aboutModel;
+    protected $featureModel;
+    protected $teamModel;
+    protected $statModel;
 
     public function __construct()
     {
@@ -51,6 +59,10 @@ class AdminController extends BaseController
         $this->microMarketSectionModel = new MicroMarketSectionModel();
         $this->developerModel = new DeveloperModel();
         $this->serviceModel = new ServiceModel();
+        $this->aboutModel = new AboutModel();
+        $this->featureModel = new FeatureModel();
+        $this->teamModel = new TeamMemberModel();
+        $this->statModel = new StatisticModel();
 
     }
 
@@ -1210,6 +1222,9 @@ class AdminController extends BaseController
     // 1. Show All Services
     public function services()
     {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
         $user = session()->get(); // Assuming you store username in session
         $services = $this->serviceModel->findAll();
 
@@ -1225,6 +1240,9 @@ class AdminController extends BaseController
     // 2. Add Service Form
     public function addService()
     {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
         $user = session()->get();
 
         $data = [
@@ -1292,6 +1310,9 @@ class AdminController extends BaseController
     // 4. Edit Service Form
     public function editService($id)
     {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
         $user = session()->get();
         $service = $this->serviceModel->find($id);
 
@@ -1389,6 +1410,506 @@ class AdminController extends BaseController
 
         return $this->response->setJSON(['success' => true]);
     }
+    public function about()
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+
+        $data = [
+            'title' => 'About Us',
+            'about' => $this->aboutModel->first(),
+            'name' => session()->get('user')['username'] ?? 'Admin',
+            'content' => 'admin/about',
+        ];
+        return view('admin/layout/templates', $data);
+    }
+
+    public function add_about()
+    {
+        $data = [
+            'title' => 'Add About Section',
+            'name' => session()->get('user')['username'] ?? 'Admin',
+            'content' => 'admin/add_about',
+        ];
+        return view('admin/layout/templates', $data);
+    }
+
+    public function save_about()
+    {
+        $rules = [
+            'heading' => 'required',
+            'paragraphs_left' => 'required',
+            'paragraphs_right' => 'required',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', 'Validation failed.');
+        }
+
+        $data = [
+            'heading' => $this->request->getPost('heading'),
+            'paragraphs_left' => $this->request->getPost('paragraphs_left'),
+            'paragraphs_right' => $this->request->getPost('paragraphs_right'),
+        ];
+
+        $this->aboutModel->insert($data);
+
+        return redirect()->to('/admin/about')->with('success', 'About section added successfully.');
+    }
+
+
+    public function edit_about($id)
+    {
+        $about = $this->aboutModel->find($id);
+        if (!$about) {
+            return redirect()->back()->with('error', 'Record not found.');
+        }
+
+        $data = [
+            'title' => 'Edit About Section',
+            'about' => $about,
+            'name' => session()->get('user')['username'] ?? 'Admin',
+            'content' => 'admin/edit_about',
+        ];
+        return view('admin/layout/templates', $data);
+    }
+
+    public function update_about($id)
+    {
+        $about = $this->aboutModel->find($id);
+        if (!$about) {
+            return redirect()->back()->with('error', 'Record not found.');
+        }
+
+        $this->aboutModel->update($id, [
+            'heading' => $this->request->getPost('heading'),
+            'paragraphs_left' => $this->request->getPost('paragraphs_left'),
+            'paragraphs_right' => $this->request->getPost('paragraphs_right'),
+        ]);
+
+        return redirect()->to('admin/about')->with('success', 'About section updated successfully.');
+    }
+
+
+    public function delete_about($id)
+    {
+        $this->aboutModel->delete($id);
+        return $this->response->setJSON(['success' => 'Deleted successfully']);
+    }
+
+
+    public function features()
+    {
+        helper('text');
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+        $data = [
+            'title' => 'Features',
+            'features' => $this->featureModel->findAll(),
+            'name' => session()->get('user')['username'] ?? 'Admin',
+            'content' => 'admin/features',
+        ];
+        $data['can_add_feature'] = count($data['features']) < 3;
+        return view('admin/layout/templates', $data);
+    }
+
+    public function add_feature()
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+        $data = [
+            'title' => 'Add Feature',
+            'name' => session()->get('user')['username'] ?? 'Admin',
+            'content' => 'admin/add_feature',
+        ];
+        return view('admin/layout/templates', $data);
+    }
+
+    public function save_feature()
+    {
+        helper(['form', 'url']);
+
+        $rules = [
+            'title' => 'required',
+            'description' => 'required',
+            'icon' => 'uploaded[icon]|max_size[icon,1024]|is_image[icon]',
+            'image' => 'uploaded[image]|max_size[image,1024]|is_image[image]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', 'Validation failed. Please check inputs and file size (max 1MB).');
+        }
+
+        // Upload icon
+        $iconFile = $this->request->getFile('icon');
+        $iconName = $iconFile->getRandomName();
+        $iconFile->move('uploads/about', $iconName);
+
+        // Upload image
+        $imageFile = $this->request->getFile('image');
+        $imageName = $imageFile->getRandomName();
+        $imageFile->move('uploads/about', $imageName);
+
+        $data = [
+            'icon' => $iconName,
+            'image' => $imageName,
+            'title' => $this->request->getPost('title'),
+            'description' => $this->request->getPost('description'),
+        ];
+
+        $this->featureModel->insert($data);
+
+        return redirect()->to('/admin/features')->with('success', 'Feature added successfully.');
+    }
+
+
+    public function edit_feature($id)
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+        $feature = $this->featureModel->find($id);
+        if (!$feature) {
+            return redirect()->back()->with('error', 'Record not found.');
+        }
+
+        $data = [
+            'title' => 'Edit Feature',
+            'feature' => $feature,
+            'name' => session()->get('user')['username'] ?? 'Admin',
+            'content' => 'admin/edit_feature',
+        ];
+        return view('admin/layout/templates', $data);
+    }
+
+    public function update_feature($id)
+    {
+        $rules = [
+            'title' => 'required',
+            'description' => 'required',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', 'Validation failed.');
+        }
+
+        $feature = $this->featureModel->find($id);
+        if (!$feature) {
+            return redirect()->to('/admin/features')->with('error', 'Feature not found.');
+        }
+
+        $data = [
+            'title' => $this->request->getPost('title'),
+            'description' => $this->request->getPost('description'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
+        // Handle icon upload
+        $iconFile = $this->request->getFile('icon');
+        if ($iconFile && $iconFile->isValid() && !$iconFile->hasMoved()) {
+            $iconName = $iconFile->getRandomName();
+            $iconFile->move('uploads/about', $iconName);
+            $data['icon'] = $iconName;
+
+            // Optionally delete old icon
+            if (!empty($feature['icon']) && file_exists('uploads/about/' . $feature['icon'])) {
+                unlink('uploads/about/' . $feature['icon']);
+            }
+        } else {
+            $data['icon'] = $feature['icon']; // keep existing
+        }
+
+        // Handle image upload
+        $imageFile = $this->request->getFile('image');
+        if ($imageFile && $imageFile->isValid() && !$imageFile->hasMoved()) {
+            $imageName = $imageFile->getRandomName();
+            $imageFile->move('uploads/about', $imageName);
+            $data['image'] = $imageName;
+
+            // Optionally delete old image
+            if (!empty($feature['image']) && file_exists('uploads/about/' . $feature['image'])) {
+                unlink('uploads/about/' . $feature['image']);
+            }
+        } else {
+            $data['image'] = $feature['image']; // keep existing
+        }
+
+        $this->featureModel->update($id, $data);
+
+        return redirect()->to('/admin/features')->with('success', 'Feature updated successfully.');
+    }
+
+
+    public function delete_feature($id)
+    {
+        $this->featureModel->delete($id);
+        return $this->response->setJSON(['success' => 'Deleted successfully']);
+    }
+
+
+    // TEAM MEMBERS SECTION
+    public function team()
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+        $data = [
+            'title' => 'Team',
+            'team_members' => $this->teamModel->findAll(),
+            'name' => session()->get('user')['username'] ?? 'Admin',
+            'content' => 'admin/team',
+        ];
+
+        return view('admin/layout/templates', $data);
+    }
+    public function add_team()
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+        $data = [
+            'title' => 'Add Team Member',
+            'name' => session()->get('user')['username'] ?? 'Admin',
+            'content' => 'admin/add_team',
+        ];
+
+        return view('admin/layout/templates', $data);
+    }
+    public function save_team()
+    {
+        $rules = [
+            'name' => 'required',
+            'designation' => 'required',
+            'image' => 'uploaded[image]|is_image[image]|mime_in[image,image/png,image/jpg,image/jpeg]|max_size[image,1024]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', 'Validation failed.');
+        }
+
+        $image = $this->request->getFile('image');
+        $imageName = $image->getRandomName();
+        $image->move('uploads/team/', $imageName);
+
+        $data = [
+            'name' => $this->request->getPost('name'),
+            'designation' => $this->request->getPost('designation'),
+            'image' => $imageName,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
+        $this->teamModel->insert($data);
+
+        return redirect()->to('/admin/team')->with('success', 'Team member added successfully.');
+    }
+    public function edit_team($id)
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+        $member = $this->teamModel->find($id);
+        if (!$member) {
+            return redirect()->back()->with('error', 'Team member not found.');
+        }
+
+        $data = [
+            'title' => 'Edit Team Member',
+            'team_member' => $member,
+            'name' => session()->get('user')['username'] ?? 'Admin',
+            'content' => 'admin/edit_team_member',
+        ];
+
+        return view('admin/layout/templates', $data);
+    }
+    public function update_team($id)
+    {
+        $member = $this->teamModel->find($id);
+        if (!$member) {
+            return redirect()->back()->with('error', 'Team member not found.');
+        }
+
+        $rules = [
+            'name' => 'required',
+            'designation' => 'required',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', 'Validation failed.');
+        }
+
+        $image = $this->request->getFile('image');
+        $imageName = $member['image'];
+
+        if ($image && $image->isValid() && !$image->hasMoved()) {
+            if (file_exists(FCPATH . 'uploads/team/' . $imageName)) {
+                unlink(FCPATH . 'uploads/team/' . $imageName);
+            }
+
+            $imageName = $image->getRandomName();
+            $image->move('uploads/team/', $imageName);
+        }
+
+        $data = [
+            'name' => $this->request->getPost('name'),
+            'designation' => $this->request->getPost('designation'),
+            'image' => $imageName,
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
+        $this->teamModel->update($id, $data);
+
+        return redirect()->to('/admin/team')->with('success', 'Team member updated successfully.');
+    }
+    public function delete_team($id)
+    {
+        $member = $this->teamModel->find($id);
+        if (!$member) {
+            return $this->response->setStatusCode(404)->setJSON(['error' => 'Team member not found']);
+        }
+
+        if (!empty($member['image']) && file_exists(FCPATH . 'uploads/team/' . $member['image'])) {
+            unlink(FCPATH . 'uploads/team/' . $member['image']);
+        }
+
+        $this->teamModel->delete($id);
+
+        return $this->response->setJSON(['success' => 'Team member deleted successfully']);
+    }
+
+
+    public function statistics()
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+
+        $data = [
+            'title' => 'Statistics',
+            'statistics' => $this->statModel->findAll(),
+            'name' => session()->get('user')['username'] ?? 'Admin',
+            'content' => 'admin/statistics',
+        ];
+        return view('admin/layout/templates', $data);
+    }
+
+    public function add_statistic()
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+        $data = [
+            'title' => 'Add Statistic',
+            'name' => session()->get('user')['username'] ?? 'Admin',
+            'content' => 'admin/add_statistic',
+        ];
+        return view('admin/layout/templates', $data);
+    }
+
+    public function save_statistic()
+    {
+        $rules = [
+            'images' => 'uploaded[images]|max_size[images,1024]|is_image[images]',
+            'number' => 'required|numeric',
+            'caption' => 'required',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', 'Validation failed.');
+        }
+
+        $image = $this->request->getFile('images');
+        $imageName = null;
+
+        if ($image && $image->isValid() && !$image->hasMoved()) {
+            $imageName = $image->getRandomName();
+            $image->move('uploads/statistics', $imageName);
+        }
+
+        $data = [
+            'caption' => $this->request->getPost('caption'),
+            'number' => $this->request->getPost('number'),
+            'images' => $imageName,
+        ];
+
+        $this->statModel->insert($data);
+        return redirect()->to('/admin/statistics')->with('success', 'Statistic added successfully.');
+    }
+
+
+    public function edit_statistic($id)
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+        $stat = $this->statModel->find($id);
+        if (!$stat) {
+            return redirect()->back()->with('error', 'Record not found.');
+        }
+
+        $data = [
+            'title' => 'Edit Statistic',
+            'statistic' => $stat,
+            'name' => session()->get('user')['username'] ?? 'Admin',
+            'content' => 'admin/edit_statistic',
+        ];
+        return view('admin/layout/templates', $data);
+    }
+
+    public function update_statistic($id)
+    {
+        $rules = [
+            'caption' => 'required',
+            'number' => 'required|numeric',
+            'images' => 'if_exist|max_size[images,1024]|is_image[images]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', 'Validation failed.');
+        }
+
+        $image = $this->request->getFile('images');
+        $imageName = null;
+
+        // Get existing record
+        $existing = $this->statModel->find($id);
+        if (!$existing) {
+            return redirect()->back()->with('error', 'Statistic not found.');
+        }
+
+        if ($image && $image->isValid() && !$image->hasMoved()) {
+            // Optionally delete old image
+            if (!empty($existing['images']) && file_exists('uploads/statistics/' . $existing['images'])) {
+                unlink('uploads/statistics/' . $existing['images']);
+            }
+
+            $imageName = $image->getRandomName();
+            $image->move('uploads/statistics', $imageName);
+        } else {
+            $imageName = $existing['images']; // keep old image
+        }
+
+        $data = [
+            'caption' => $this->request->getPost('caption'),
+            'number' => $this->request->getPost('number'),
+            'images' => $imageName,
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+
+        $this->statModel->update($id, $data);
+        return redirect()->to('/admin/statistics')->with('success', 'Statistic updated successfully.');
+    }
+
+
+    public function delete_statistic($id)
+    {
+        $this->statModel->delete($id);
+        return $this->response->setJSON(['success' => 'Deleted successfully']);
+    }
+
 
 
 }

@@ -47,4 +47,38 @@ $routes->group('admin', function ($routes) {
     $routes->get('edit-service/(:num)', 'AdminController::editService/$1');
     $routes->post('update-service/(:num)', 'AdminController::updateService/$1');
     $routes->delete('delete-service/(:num)', 'AdminController::deleteService/$1');
+    // ========== ABOUT SECTION ==========
+    $routes->get('about', 'AdminController::about');
+    $routes->get('add-about', 'AdminController::add_about');
+    $routes->post('save-about', 'AdminController::save_about');
+    $routes->get('edit-about/(:num)', 'AdminController::edit_about/$1');
+    $routes->post('update-about/(:num)', 'AdminController::update_about/$1');
+    $routes->delete('delete-about/(:num)', 'AdminController::delete_about/$1');
+
+    // ========== FEATURE SECTION ==========
+    $routes->get('features', 'AdminController::features');
+    $routes->get('add-feature', 'AdminController::add_feature');
+    $routes->post('save-feature', 'AdminController::save_feature');
+    $routes->get('edit-feature/(:num)', 'AdminController::edit_feature/$1');
+    $routes->post('update-feature/(:num)', 'AdminController::update_feature/$1');
+    $routes->delete('delete-feature/(:num)', 'AdminController::delete_feature/$1');
+
+    // ========== TEAM SECTION ==========
+    $routes->get('team', 'AdminController::team');
+    $routes->get('add-team', 'AdminController::add_team');
+    $routes->post('save-team', 'AdminController::save_team');
+    $routes->get('edit-team/(:num)', 'AdminController::edit_team/$1');
+    $routes->post('update-team/(:num)', 'AdminController::update_team/$1');
+    $routes->delete('delete-team/(:num)', 'AdminController::delete_team/$1');
+
+    // ========== STATISTICS SECTION ==========
+    $routes->get('statistics', 'AdminController::statistics');
+    $routes->get('add-statistic', 'AdminController::add_statistic');
+    $routes->post('save-statistic', 'AdminController::save_statistic');
+    $routes->get('edit-statistic/(:num)', 'AdminController::edit_statistic/$1');
+    $routes->post('update-statistic/(:num)', 'AdminController::update_statistic/$1');
+    $routes->delete('delete-statistic/(:num)', 'AdminController::delete_statistic/$1');
+
+
+
 });

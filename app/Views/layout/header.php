@@ -137,8 +137,8 @@
                                 <?php endif; ?>
                             </ul>
                         </li>
-                        <li><a href="about">About</a></li>
-                        <li><a href="contact_us">Contact Us</a></li>
+                        <li><a href="<?php echo base_url() ?>about">About</a></li>
+                        <li><a href="<?php echo base_url() ?>contact_us">Contact Us</a></li>
                     </ul>
 
                     <a href="#"

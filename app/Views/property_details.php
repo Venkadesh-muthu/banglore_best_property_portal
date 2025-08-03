@@ -179,23 +179,23 @@ $bgImage = !empty($images) && count($images) > 0
                     ['Unit Density', 'units/acre', $property['unit_density'], $property['avg_unit_density']],
                 ];
 
-                foreach ($review_data as $data) {
-                    [$title, $unit, $value, $avg, $lower_is_better] = array_pad($data, 5, false);
+foreach ($review_data as $data) {
+    [$title, $unit, $value, $avg, $lower_is_better] = array_pad($data, 5, false);
 
-                    $emoji = 'confused.png'; // default
-                    if (is_numeric($value) && is_numeric($avg)) {
-                        $diff = ($value - $avg);
-                        $percent_diff = $avg > 0 ? ($diff / $avg) * 100 : 0;
+    $emoji = 'confused.png'; // default
+    if (is_numeric($value) && is_numeric($avg)) {
+        $diff = ($value - $avg);
+        $percent_diff = $avg > 0 ? ($diff / $avg) * 100 : 0;
 
-                        if ($lower_is_better) {
-                            $emoji = $value < $avg * 0.95 ? 'smile.png' : ($value > $avg * 1.05 ? 'sad-face.png' : 'confused.png');
-                        } else {
-                            $emoji = $percent_diff > 5 ? 'smile.png' : ($percent_diff < -5 ? 'sad-face.png' : 'confused.png');
-                        }
-                    }
+        if ($lower_is_better) {
+            $emoji = $value < $avg * 0.95 ? 'smile.png' : ($value > $avg * 1.05 ? 'sad-face.png' : 'confused.png');
+        } else {
+            $emoji = $percent_diff > 5 ? 'smile.png' : ($percent_diff < -5 ? 'sad-face.png' : 'confused.png');
+        }
+    }
 
-                    $img_url = base_url('images/' . $emoji);
-                    ?>
+    $img_url = base_url('images/' . $emoji);
+    ?>
                     <div class="col">
                         <div class="bg-white p-4 text-center shadow-sm rounded-4 h-100">
                             <img src="<?= $img_url ?>" alt="emoji" class="mb-2" style="width: 36px; height: 36px;">
@@ -255,17 +255,17 @@ $bgImage = !empty($images) && count($images) > 0
 
             <?php
             $groupedPlans = [];
-            foreach ($floor_plans as $plan) {
-                $type = $plan['bhk_type'];
-                $size = $plan['saleable_area'];
-                if (!isset($groupedPlans[$type])) {
-                    $groupedPlans[$type] = [];
-                }
-                if (!in_array($size, $groupedPlans[$type])) {
-                    $groupedPlans[$type][] = $size;
-                }
-            }
-            ?>
+foreach ($floor_plans as $plan) {
+    $type = $plan['bhk_type'];
+    $size = $plan['saleable_area'];
+    if (!isset($groupedPlans[$type])) {
+        $groupedPlans[$type] = [];
+    }
+    if (!in_array($size, $groupedPlans[$type])) {
+        $groupedPlans[$type][] = $size;
+    }
+}
+?>
 
             <!-- Summary Section -->
             <div class="bg-opacity-75 rounded-4 mb-5">
@@ -276,14 +276,14 @@ $bgImage = !empty($images) && count($images) > 0
                     <p class="text-dark lh-lg">
                         <?= esc($property['name']) ?> offers
                         <?php
-                        $types = array_keys($groupedPlans);
-                        $lastType = array_pop($types);
-                        echo implode(', ', $types) . ' and ' . $lastType;
-                        ?>.
+            $types = array_keys($groupedPlans);
+$lastType = array_pop($types);
+echo implode(', ', $types) . ' and ' . $lastType;
+?>.
                         <?php foreach ($groupedPlans as $type => $sizes): ?>
                             <?= esc($type) ?> has <?= count($sizes) ?> configuration<?= count($sizes) > 1 ? 's' : '' ?>:
                             <?php
-                            $lastSize = array_pop($sizes);
+    $lastSize = array_pop($sizes);
                             echo implode(', ', $sizes) . ' and ' . $lastSize;
                             ?> sq.ft.;
                         <?php endforeach; ?>
@@ -319,7 +319,7 @@ $bgImage = !empty($images) && count($images) > 0
                         <select class="form-select shadow-sm" id="filterType">
                             <?php
                             $types = array_unique(array_column($floor_plans, 'bhk_type'));
-                            foreach ($types as $index => $type): ?>
+foreach ($types as $index => $type): ?>
                                 <option value="<?= esc($type) ?>" <?= $index === 0 ? 'selected' : '' ?>>
                                     <?= esc($type) ?>
                                 </option>
@@ -331,8 +331,8 @@ $bgImage = !empty($images) && count($images) > 0
                             Area</label>
                         <select class="form-select shadow-sm" id="filterSize">
                             <?php
-                            $sizes = array_unique(array_column($floor_plans, 'saleable_area'));
-                            foreach ($sizes as $index => $size): ?>
+$sizes = array_unique(array_column($floor_plans, 'saleable_area'));
+foreach ($sizes as $index => $size): ?>
                                 <option value="<?= esc($size) ?>" <?= $index === 0 ? 'selected' : '' ?>>
                                     <?= esc($size) ?> sq.ft
                                 </option>
@@ -411,7 +411,7 @@ $bgImage = !empty($images) && count($images) > 0
                 <!-- Sub-tabs for Specification Categories -->
                 <ul class="nav nav-pills mb-4 gap-2" id="spec-sub-tabs" role="tablist">
                     <?php $i = 0;
-                    foreach ($grouped_specifications as $section => $specs): ?>
+foreach ($grouped_specifications as $section => $specs): ?>
                         <li class="nav-item" role="presentation">
                             <button class="bg-secondary nav-link d-flex align-items-center <?= $i === 0 ? 'active' : '' ?>"
                                 id="tab-<?= esc($section) ?>" data-bs-toggle="pill"
@@ -429,7 +429,7 @@ $bgImage = !empty($images) && count($images) > 0
                 <!-- Sub-tab Content -->
                 <div class="tab-content" id="spec-tabContent">
                     <?php $i = 0;
-                    foreach ($grouped_specifications as $section => $specs): ?>
+foreach ($grouped_specifications as $section => $specs): ?>
                         <div class="tab-pane fade <?= $i === 0 ? 'show active' : '' ?>" id="pane-<?= esc($section) ?>"
                             role="tabpanel" aria-labelledby="tab-<?= esc($section) ?>">
                             <div class="row">
@@ -466,89 +466,89 @@ $bgImage = !empty($images) && count($images) > 0
 
                 <?php
                 $all_amenities = [
-                    'lifestyle' => [
-                        'Pet Park',
-                        'Supermarket',
-                        'Pharmacy/Clinic',
-                        'Library',
-                        'Sauna',
-                        'Amphitheatre',
-                        'Swimming Pool',
-                        'Gym - Indoor',
-                        'Gym - Outdoor',
-                        'Cafe/Restaurant',
-                        'Jacuzzi',
-                        'Kids Play Area',
-                        'Salon',
-                        'Play School',
-                        'Heated Pool'
-                    ],
-                    'sports' => [
-                        'Running Track',
-                        'Basketball',
-                        'Badminton',
-                        'Cricket Pitch',
-                        'Cricket Ground',
-                        'Football Ground',
-                        'Squash',
-                        'Skating',
-                        'Lawn Tennis',
-                        'Volleyball Net'
-                    ],
-                    'natural' => [
-                        'Lake',
-                        'Forest',
-                        'Army Land',
-                        'Mountain/Hill',
-                        'Golf Course',
-                        'Park Area'
-                    ],
+'lifestyle' => [
+    'Pet Park',
+    'Supermarket',
+    'Pharmacy/Clinic',
+    'Library',
+    'Sauna',
+    'Amphitheatre',
+    'Swimming Pool',
+    'Gym - Indoor',
+    'Gym - Outdoor',
+    'Cafe/Restaurant',
+    'Jacuzzi',
+    'Kids Play Area',
+    'Salon',
+    'Play School',
+    'Heated Pool'
+],
+'sports' => [
+    'Running Track',
+    'Basketball',
+    'Badminton',
+    'Cricket Pitch',
+    'Cricket Ground',
+    'Football Ground',
+    'Squash',
+    'Skating',
+    'Lawn Tennis',
+    'Volleyball Net'
+],
+'natural' => [
+    'Lake',
+    'Forest',
+    'Army Land',
+    'Mountain/Hill',
+    'Golf Course',
+    'Park Area'
+],
                 ];
 
-                // ✅ Image file mapping (custom names)
-                $amenity_images = [
-                    'Pet Park' => 'dog-park.png',
-                    'Supermarket' => 'super-market.png',
-                    'Pharmacy/Clinic' => 'pharmacy.png',
-                    'Library' => 'search.png',
-                    'Sauna' => 'sauna.png',
-                    'Amphitheatre' => 'amphitheatre.png',
-                    'Swimming Pool' => 'swim.png',
-                    'Gym - Indoor' => 'exercise.png',
-                    'Gym - Outdoor' => 'pull-up-bar.png',
-                    'Cafe/Restaurant' => 'table.png',
-                    'Jacuzzi' => 'bathroom (1).png',
-                    'Kids Play Area' => 'playground.png',
-                    'Salon' => 'salon.png',
-                    'Play School' => 'abacus.png',
-                    'Heated Pool' => 'swimming.png',
+// ✅ Image file mapping (custom names)
+$amenity_images = [
+    'Pet Park' => 'dog-park.png',
+    'Supermarket' => 'super-market.png',
+    'Pharmacy/Clinic' => 'pharmacy.png',
+    'Library' => 'search.png',
+    'Sauna' => 'sauna.png',
+    'Amphitheatre' => 'amphitheatre.png',
+    'Swimming Pool' => 'swim.png',
+    'Gym - Indoor' => 'exercise.png',
+    'Gym - Outdoor' => 'pull-up-bar.png',
+    'Cafe/Restaurant' => 'table.png',
+    'Jacuzzi' => 'bathroom (1).png',
+    'Kids Play Area' => 'playground.png',
+    'Salon' => 'salon.png',
+    'Play School' => 'abacus.png',
+    'Heated Pool' => 'swimming.png',
 
-                    'Running Track' => 'track-and-field.png',
-                    'Basketball' => 'net.png',
-                    'Badminton' => 'badminton.png',
-                    'Cricket Pitch' => 'cricket-ground.png',
-                    'Cricket Ground' => 'stadium.png',
-                    'Football Ground' => 'soccer.png',
-                    'Squash' => 'squash.png',
-                    'Skating' => 'ice-skating.png',
-                    'Lawn Tennis' => 'game.png',
-                    'Volleyball Net' => 'volleyball.png',
+    'Running Track' => 'track-and-field.png',
+    'Basketball' => 'net.png',
+    'Badminton' => 'badminton.png',
+    'Cricket Pitch' => 'cricket-ground.png',
+    'Cricket Ground' => 'stadium.png',
+    'Football Ground' => 'soccer.png',
+    'Squash' => 'squash.png',
+    'Skating' => 'ice-skating.png',
+    'Lawn Tennis' => 'game.png',
+    'Volleyball Net' => 'volleyball.png',
 
-                    'Lake' => 'lake.png',
-                    'Forest' => 'wood.png',
-                    'Army Land' => 'land-mine.png',
-                    'Mountain/Hill' => 'mountain.png',
-                    'Golf Course' => 'golf-hole.png',
-                    'Park Area' => 'picnic.png',
-                ];
-                ?>
+    'Lake' => 'lake.png',
+    'Forest' => 'wood.png',
+    'Army Land' => 'land-mine.png',
+    'Mountain/Hill' => 'mountain.png',
+    'Golf Course' => 'golf-hole.png',
+    'Park Area' => 'picnic.png',
+];
+?>
 
                 <?php foreach ($all_amenities as $category => $items): ?>
                     <h6 class="mt-4 text-capitalize"><?= ucfirst($category) ?> Amenities</h6>
                     <div class="d-flex flex-wrap gap-4 mt-2 p-3">
                         <?php foreach ($items as $item): ?>
                             <?php
-                            $selected = false;
+            $selected = false;
                             $rare = null;
 
                             if (!empty($grouped_amenities[$category])) {
@@ -647,7 +647,7 @@ $bgImage = !empty($images) && count($images) > 0
         <?php if (!empty($legalApprovals)): ?>
             <h6 class="mb-4 text-dark">
                 <strong><?= esc($property['name']) ?></strong> has received
-                <strong><?= count(array_filter($legalApprovals, fn($a) => $a['status'] === 'Approved')) ?> out of
+                <strong><?= count(array_filter($legalApprovals, fn ($a) => $a['status'] === 'Approved')) ?> out of
                     <?= count($legalApprovals) ?> important approvals</strong> as per <strong>RERA</strong>.
             </h6>
 

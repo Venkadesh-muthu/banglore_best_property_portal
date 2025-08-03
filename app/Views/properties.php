@@ -63,7 +63,7 @@
         <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="150">
             <ol class="breadcrumb justify-content-center mb-0">
                 <li class="breadcrumb-item">
-                    <a href="/" class="text-white-50 text-decoration-none">Home</a>
+                    <a href="<?php echo base_url() ?>" class="text-white-50 text-decoration-none">Home</a>
                 </li>
                 <li class="breadcrumb-item active text-white-50" aria-current="page">All Properties</li>
             </ol>
