@@ -20,6 +20,8 @@ use App\Models\AboutModel;
 use App\Models\FeatureModel;
 use App\Models\TeamMemberModel;
 use App\Models\StatisticModel;
+use App\Models\ResourceModel;
+use App\Models\ContactUsModel;
 use CodeIgniter\Controller;
 
 class AdminController extends BaseController
@@ -42,6 +44,8 @@ class AdminController extends BaseController
     protected $featureModel;
     protected $teamModel;
     protected $statModel;
+    protected $resourceModel;
+    protected $contactModel;
 
     public function __construct()
     {
@@ -63,6 +67,9 @@ class AdminController extends BaseController
         $this->featureModel = new FeatureModel();
         $this->teamModel = new TeamMemberModel();
         $this->statModel = new StatisticModel();
+        $this->resourceModel = new ResourceModel();
+        $this->contactModel = new ContactUsModel();
+
 
     }
 
@@ -1150,9 +1157,6 @@ class AdminController extends BaseController
 
         return view('admin/layout/templates', $data);
     }
-
-
-
     public function update_developer($id)
     {
         $developer = $this->developerModel->find($id);
@@ -1908,6 +1912,325 @@ class AdminController extends BaseController
     {
         $this->statModel->delete($id);
         return $this->response->setJSON(['success' => 'Deleted successfully']);
+    }
+    // 1. Show All Resources
+    public function resources()
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+
+        $resources = $this->resourceModel->findAll();
+        $user = session()->get();
+
+        $data = [
+            'title' => 'Resources',
+            'name' => $user['username'] ?? 'Admin',
+            'resources' => $resources,
+            'content' => 'admin/resources',
+        ];
+        return view('admin/layout/templates', $data);
+    }
+
+    // 2. Show Add Resource Form
+    public function addResource()
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+
+        if (count($this->resourceModel->findAll()) >= 5) {
+            return redirect()->back()->with('error', 'You can add only 5 resources.');
+        }
+
+        $user = session()->get();
+        $data = [
+            'title' => 'Add Resource',
+            'name' => $user['username'] ?? 'Admin',
+            'content' => 'admin/add_resource',
+        ];
+        return view('admin/layout/templates', $data);
+    }
+
+    // 3. Save New Resource
+    public function saveResource()
+    {
+        $validation = \Config\Services::validation();
+
+        $rules = [
+            'title'             => 'required',
+            'slug'              => 'required|is_unique[resources.slug]',
+            'category'          => 'required',
+            'description'       => 'required',
+            'publish_date'      => 'required',
+            'image'             => 'uploaded[image]|is_image[image]|max_size[image,1024]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', $validation->listErrors());
+        }
+
+        $img = $this->request->getFile('image');
+        $imageName = '';
+        if ($img && $img->isValid() && !$img->hasMoved()) {
+            $imageName = $img->getRandomName();
+            $img->move('uploads/resources/', $imageName);
+        }
+
+        $this->resourceModel->save([
+            'title'             => $this->request->getPost('title'),
+            'slug'              => $this->request->getPost('slug'),
+            'category'          => $this->request->getPost('category'),
+            'short_description' => $this->request->getPost('short_description'),
+            'description'       => $this->request->getPost('description'),
+            'image'             => $imageName,
+            'publish_date'      => $this->request->getPost('publish_date'),
+            'read_time'         => $this->request->getPost('read_time'),
+            'author_name'       => $this->request->getPost('author_name'),
+            'meta_title'        => $this->request->getPost('meta_title'),
+            'meta_description'  => $this->request->getPost('meta_description'),
+            'meta_keywords'     => $this->request->getPost('meta_keywords'),
+            'tags'              => $this->request->getPost('tags'),
+            'is_new'            => $this->request->getPost('is_new') ?? 0,
+            'is_featured'       => $this->request->getPost('is_featured') ?? 0,
+            'status'            => $this->request->getPost('status'),
+        ]);
+
+        return redirect()->to('admin/resources')->with('success', 'Resource added successfully');
+    }
+
+
+    // 4. Show Edit Form
+    public function editResource($id)
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+
+        $resource = $this->resourceModel->find($id);
+        $user = session()->get();
+
+        if (!$resource) {
+            return redirect()->to('admin/resources')->with('error', 'Resource not found');
+        }
+
+        $data = [
+            'title' => 'Edit Resource',
+            'name' => $user['username'] ?? 'Admin',
+            'resource' => $resource,
+            'content' => 'admin/edit_resource',
+        ];
+        return view('admin/layout/templates', $data);
+    }
+
+    // 5. Update Resource
+    public function updateResource($id)
+    {
+        $validation = \Config\Services::validation();
+
+        $rules = [
+            'title'       => 'required',
+            'slug'        => "required|is_unique[resources.slug,id,{$id}]",
+            'category'    => 'required',
+            'description' => 'required',
+            'publish_date' => 'required',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', $validation->listErrors());
+        }
+
+        $resource   = $this->resourceModel->find($id);
+        $imageName  = $resource['image'];
+
+        $img = $this->request->getFile('image');
+        if ($img && $img->isValid() && !$img->hasMoved()) {
+            // delete old
+            if ($imageName && file_exists('uploads/resources/' . $imageName)) {
+                unlink('uploads/resources/' . $imageName);
+            }
+            $imageName = $img->getRandomName();
+            $img->move('uploads/resources/', $imageName);
+        }
+
+        $this->resourceModel->update($id, [
+            'title'             => $this->request->getPost('title'),
+            'slug'              => $this->request->getPost('slug'),
+            'category'          => $this->request->getPost('category'),
+            'description'       => $this->request->getPost('description'),
+            'short_description' => $this->request->getPost('short_description'),
+            'image'             => $imageName,
+            'publish_date'      => $this->request->getPost('publish_date'),
+            'read_time'         => $this->request->getPost('read_time'),
+            'author_name'       => $this->request->getPost('author_name'),
+            'meta_title'        => $this->request->getPost('meta_title'),
+            'meta_description'  => $this->request->getPost('meta_description'),
+            'meta_keywords'     => $this->request->getPost('meta_keywords'),
+            'tags'              => $this->request->getPost('tags'),
+            'is_new'            => $this->request->getPost('is_new') ?? 0,
+            'is_featured'       => $this->request->getPost('is_featured') ?? 0,
+            'status'            => $this->request->getPost('status'),
+        ]);
+
+        return redirect()->to('admin/resources')->with('success', 'Resource updated successfully');
+    }
+
+
+    // 6. Delete Resource
+    public function deleteResource($id)
+    {
+        $resource = $this->resourceModel->find($id);
+
+        if (!$resource) {
+            return $this->response->setJSON(['error' => 'Resource not found']);
+        }
+
+        if (!empty($resource['image']) && file_exists('uploads/resources/' . $resource['image'])) {
+            unlink('uploads/resources/' . $resource['image']);
+        }
+
+        $this->resourceModel->delete($id);
+        return $this->response->setJSON(['success' => true]);
+    }
+    public function contact_us()
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+
+        $adminId = session()->get('admin_id');
+        $user = $this->adminModel->find($adminId);
+
+        $contact = $this->contactModel->first(); // assuming one record
+
+        $data = [
+            'title' => 'Contact Us',
+            'name' => $user['username'] ?? 'Admin',
+            'content' => 'admin/contact_us',
+            'contact' => $contact,
+        ];
+
+        return view('admin/layout/templates', $data);
+    }
+    public function add_contact()
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+
+        $adminId = session()->get('admin_id');
+        $user = $this->adminModel->find($adminId);
+
+        $data = [
+            'title' => 'Add Contact Us Info',
+            'name' => $user['username'] ?? 'Admin',
+            'content' => 'admin/add_contact_us',
+        ];
+
+        return view('admin/layout/templates', $data);
+    }
+    public function save_contact()
+    {
+        helper(['form']);
+
+        $rules = [
+            'location' => 'required',
+            'open_days' => 'required',
+            'open_hours' => 'required',
+            'email' => 'required|valid_email',
+            'phone' => 'required'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', implode(', ', $this->validator->getErrors()));
+        }
+
+        $data = [
+            'location' => $this->request->getPost('location'),
+            'open_days' => $this->request->getPost('open_days'),
+            'open_hours' => $this->request->getPost('open_hours'),
+            'email' => $this->request->getPost('email'),
+            'phone' => $this->request->getPost('phone'),
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+
+        if ($this->contactModel->insert($data)) {
+            return redirect()->to('admin/contact-us')->with('success', 'Contact details added.');
+        }
+
+        return redirect()->back()->withInput()->with('error', 'Failed to save contact info.');
+    }
+    public function edit_contact($id)
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+
+        $contact = $this->contactModel->find($id);
+        if (!$contact) {
+            return redirect()->back()->with('error', 'Contact info not found.');
+        }
+
+        $adminId = session()->get('admin_id');
+        $user = $this->adminModel->find($adminId);
+
+        $data = [
+            'title' => 'Edit Contact Info',
+            'name' => $user['username'] ?? 'Admin',
+            'content' => 'admin/edit_contact_us',
+            'contact' => $contact,
+        ];
+
+        return view('admin/layout/templates', $data);
+    }
+    public function update_contact($id)
+    {
+        $contact = $this->contactModel->find($id);
+        if (!$contact) {
+            return redirect()->back()->with('error', 'Contact not found.');
+        }
+
+        $rules = [
+            'location' => 'required',
+            'open_days' => 'required',
+            'open_hours' => 'required',
+            'email' => 'required|valid_email',
+            'phone' => 'required',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', 'Validation failed.');
+        }
+
+        $data = [
+            'location' => $this->request->getPost('location'),
+            'open_days' => $this->request->getPost('open_days'),
+            'open_hours' => $this->request->getPost('open_hours'),
+            'email' => $this->request->getPost('email'),
+            'phone' => $this->request->getPost('phone'),
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+
+        $this->contactModel->update($id, $data);
+
+        return redirect()->to('admin/contact-us')->with('success', 'Contact updated successfully.');
+    }
+    public function delete_contact($id)
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return $this->response->setStatusCode(403)->setJSON(['error' => 'Unauthorized']);
+        }
+
+        $contact = $this->contactModel->find($id);
+        if (!$contact) {
+            return $this->response->setStatusCode(404)->setJSON(['error' => 'Contact not found']);
+        }
+
+        if ($this->contactModel->delete($id)) {
+            return $this->response->setJSON(['success' => 'Contact deleted successfully']);
+        }
+
+        return $this->response->setStatusCode(500)->setJSON(['error' => 'Deletion failed']);
     }
 
 

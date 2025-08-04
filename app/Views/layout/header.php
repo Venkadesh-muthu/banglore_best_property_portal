@@ -137,6 +137,21 @@
                                 <?php endif; ?>
                             </ul>
                         </li>
+                        <li class="has-children">
+                            <a class="nav-link" href="#">Resources</a>
+                            <ul class="dropdown">
+                                <?php if (!empty($resources)): ?>
+                                    <?php foreach ($resources as $resource): ?>
+                                        <li>
+                                            <a class="dropdown-item" href="<?= base_url('resources/' . esc($resource['category'])) ?>">
+                                                <i class="bi bi-book me-1"></i> <?= esc($resource['category']) ?>
+                                            </a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </ul>
+                        </li>
+
                         <li><a href="<?php echo base_url() ?>about">About</a></li>
                         <li><a href="<?php echo base_url() ?>contact_us">Contact Us</a></li>
                     </ul>

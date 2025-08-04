@@ -13,7 +13,7 @@ $routes->get('property_details/(:num)', 'MainController::propertyDetails/$1');
 $routes->get('property/search', 'MainController::search');
 $routes->get('compare_properties', 'MainController::compareProperties');
 $routes->get('services/(:segment)', 'MainController::serviceDetail/$1');
-
+$routes->get('resources/(:segment)', 'MainController::resourceDetail/$1');
 
 $routes->get('services', 'MainController::services');
 $routes->get('about', 'MainController::about');
@@ -79,6 +79,20 @@ $routes->group('admin', function ($routes) {
     $routes->post('update-statistic/(:num)', 'AdminController::update_statistic/$1');
     $routes->delete('delete-statistic/(:num)', 'AdminController::delete_statistic/$1');
 
+    // Resources Routes
+    $routes->get('resources', 'AdminController::resources');
+    $routes->get('add-resource', 'AdminController::addResource');
+    $routes->post('save-resource', 'AdminController::saveResource');
+    $routes->get('edit-resource/(:num)', 'AdminController::editResource/$1');
+    $routes->post('update-resource/(:num)', 'AdminController::updateResource/$1');
+    $routes->delete('delete-resource/(:num)', 'AdminController::deleteResource/$1');
+
+    $routes->get('contact-us', 'AdminController::contact_us');
+    $routes->get('add-contact', 'AdminController::add_contact');
+    $routes->post('save-contact', 'AdminController::save_contact');
+    $routes->get('edit-contact/(:num)', 'AdminController::edit_contact/$1');
+    $routes->post('update-contact/(:num)', 'AdminController::update_contact/$1');
+    $routes->delete('delete-contact/(:num)', 'AdminController::delete_contact/$1');
 
 
 });

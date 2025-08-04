@@ -14,6 +14,12 @@ use App\Models\MicroMarketDocumentModel;
 use App\Models\MicroMarketSectionModel;
 use App\Models\DeveloperModel;
 use App\Models\ServiceModel;
+use App\Models\AboutModel;
+use App\Models\FeatureModel;
+use App\Models\StatisticModel;
+use App\Models\TeamMemberModel;
+use App\Models\ResourceModel;
+use App\Models\ContactUsModel;
 
 class MainController extends BaseController
 {
@@ -29,6 +35,12 @@ class MainController extends BaseController
     protected $microMarketSectionModel;
     protected $developerModel;
     protected $serviceModel;
+    protected $aboutContentModel;
+    protected $featureModel;
+    protected $statisticModel;
+    protected $teamModel;
+    protected $resourceModel;
+    protected $contactModel;
 
     public function __construct()
     {
@@ -44,6 +56,12 @@ class MainController extends BaseController
         $this->microMarketSectionModel = new MicroMarketSectionModel();
         $this->developerModel = new DeveloperModel();
         $this->serviceModel = new ServiceModel();
+        $this->aboutContentModel = new AboutModel();
+        $this->featureModel = new FeatureModel();
+        $this->statisticModel = new StatisticModel();
+        $this->teamModel = new TeamMemberModel();
+        $this->resourceModel = new ResourceModel();
+        $this->contactModel = new ContactUsModel();
     }
     public function index(): string
     {
@@ -51,6 +69,7 @@ class MainController extends BaseController
                    ->orderBy('id', 'DESC') // Replace 'id' with 'created_at' if needed
                    ->findAll(6);
         $services = $this->serviceModel->where('status', 1)->findAll();
+        $resources = $this->resourceModel->where('status', 'active')->orderBy('id', 'DESC')->findAll(5);
         foreach ($properties as &$property) {
             $image = $this->propertyImageModel
                 ->where('property_id', $property['id'])
@@ -64,6 +83,7 @@ class MainController extends BaseController
             'content' => 'home',
             'properties' => $properties,
             'services' => $services,
+            'resources'  => $resources,
         ];
 
         return view('layout/templates', $data);
@@ -177,6 +197,7 @@ class MainController extends BaseController
         $maxBudgets = array_filter(array_map(fn ($row) => (int) $row['price'], $maxBudgetsRaw));
 
         $services = $this->serviceModel->where('status', 1)->findAll();
+        $resources = $this->resourceModel->where('status', 'active')->orderBy('id', 'DESC')->findAll(5);
         // Pass data to view
         $data = [
             'title' => 'Properties',
@@ -196,6 +217,7 @@ class MainController extends BaseController
             'minBudgets' => $minBudgets,
             'maxBudgets' => $maxBudgets,
             'services' => $services,
+            'resources'  => $resources,
         ];
 
 
@@ -223,6 +245,7 @@ class MainController extends BaseController
     }
     public function compareProperties()
     {
+        $resources = $this->resourceModel->where('status', 'active')->orderBy('id', 'DESC')->findAll(5);
         $allProperties = $this->propertyModel->findAll();
 
         $property1 = null;
@@ -242,6 +265,7 @@ class MainController extends BaseController
             'allProperties' => $allProperties,
             'property1' => $property1,
             'property2' => $property2,
+            'resources'  => $resources,
         ];
 
         return view('layout/templates', $data);
@@ -462,6 +486,7 @@ class MainController extends BaseController
 
         // Fetch related developer for this property
         $developer = $this->developerModel->where('property_id', $id)->first();
+        $resources = $this->resourceModel->where('status', 'active')->orderBy('id', 'DESC')->findAll(5);
         $data = [
             'title' => $property['name'],
             'content' => 'property_details',
@@ -475,6 +500,7 @@ class MainController extends BaseController
             // 'microMarketDocuments' => $microMarketDocuments,
             // 'microMarketSection' => $microMarketSection,
             'developer' => $developer,
+            'resources'  => $resources,
         ];
 
 
@@ -486,10 +512,12 @@ class MainController extends BaseController
     public function services()
     {
         $services = $this->serviceModel->where('status', 1)->findAll();
+        $resources = $this->resourceModel->where('status', 'active')->orderBy('id', 'DESC')->findAll(5);
         $data = [
             'title' => 'Services',
             'content' => 'services',
             'services' => $services,
+            'resources'  => $resources,
         ];
         return view('layout/templates', $data);
     }
@@ -502,32 +530,104 @@ class MainController extends BaseController
         if (!$service) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
-
+        $resources = $this->resourceModel->where('status', 'active')->orderBy('id', 'DESC')->findAll(5);
         $data = [
             'title' => $service['title'],
             'service' => $service,
             'services' => $services,
             'content' => 'service_detail',
+            'resources'  => $resources,
+        ];
+
+        return view('layout/templates', $data);
+    }
+    public function resources()
+    {
+        $resources = $this->resourceModel->where('status', 'active')->orderBy('id', 'DESC')->findAll();
+        $services = $this->serviceModel->where('status', 1)->findAll(); // For top nav or sidebar, like services
+
+        $data = [
+            'title'     => 'Resources',
+            'content'   => 'resources', // This should be a view file like `resources.php` under `Views/`
+            'resources' => $resources,
+            'services'  => $services,
+        ];
+
+        return view('layout/templates', $data);
+    }
+    public function resourceDetail($slug)
+    {
+        // Normalize slug to lowercase
+        $slug = strtolower($slug);
+
+        // Fetch the matching active resource
+        $resource = $this->resourceModel
+            ->where('category', $slug)
+            ->where('status', 'active')
+            ->first();
+
+        // If not found, show 404
+        if (!$resource) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Resource Not Found');
+        }
+
+        // Get latest 5 resources for sidebar
+        $resources = $this->resourceModel
+            ->where('status', 'active')
+            ->orderBy('id', 'DESC')
+            ->findAll(5);
+
+        // Get all active services
+        $services = $this->serviceModel
+            ->where('status', 1)
+            ->findAll();
+
+        // Prepare data for view
+        $data = [
+            'title'     => $resource['title'],
+            'content'   => 'resource_detail', // The view inside Views/
+            'resource'  => $resource,
+            'resources' => $resources,
+            'services'  => $services,
         ];
 
         return view('layout/templates', $data);
     }
 
+
+
     public function about()
     {
+        $services = $this->serviceModel->where('status', 1)->findAll();
+        $resources = $this->resourceModel->where('status', 'active')->orderBy('id', 'DESC')->findAll(5);
         $data = [
             'title' => 'About Us',
+            'about' => $this->aboutContentModel->first(),
+            'features' => $this->featureModel->findAll(3),
+            'statistics' => $this->statisticModel->findAll(4),
+            'team' => $this->teamModel->findAll(),
             'content' => 'about',
+            'resources'  => $resources,
+            'services'  => $services,
         ];
+
         return view('layout/templates', $data);
     }
 
     public function contact_us()
     {
+        $services = $this->serviceModel->where('status', 1)->findAll();
+        $resources = $this->resourceModel->where('status', 'active')->orderBy('id', 'DESC')->findAll(5);
+        $contact = $this->contactModel->first(); // Get active contact
+
         $data = [
             'title' => 'Contact Us',
             'content' => 'contact_us',
+            'resources'  => $resources,
+            'services'  => $services,
+            'contact' => $contact, // Pass to view
         ];
         return view('layout/templates', $data);
     }
+
 }
