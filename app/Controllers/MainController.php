@@ -245,7 +245,6 @@ class MainController extends BaseController
     }
     public function compareProperties()
     {
-        $resources = $this->resourceModel->where('status', 'active')->orderBy('id', 'DESC')->findAll(5);
         $allProperties = $this->propertyModel->findAll();
 
         $property1 = null;
@@ -258,13 +257,15 @@ class MainController extends BaseController
             $property1 = $this->propertyModel->find($id1);
             $property2 = $this->propertyModel->find($id2);
         }
-
+        $services = $this->serviceModel->where('status', 1)->findAll();
+        $resources = $this->resourceModel->where('status', 'active')->orderBy('id', 'DESC')->findAll(5);
         $data = [
             'title' => 'Compare Properties',
             'content' => 'compare_properties',
             'allProperties' => $allProperties,
             'property1' => $property1,
             'property2' => $property2,
+            'services' => $services,
             'resources'  => $resources,
         ];
 
