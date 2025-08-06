@@ -162,14 +162,28 @@ $bgImage = !empty($images) && count($images) > 0
             <div class="row">
                 <h1 class="text-primary mb-2 text-center"><?= esc($property['name']) ?></h1>
                 <p class="text-muted fs-6 mb-2 text-center"><?= esc($property['location']) ?></p>
+                <?php
+                if (!function_exists('formatINR')) {
+                    function formatINR($amount)
+                    {
+                        $amount = floatval(str_replace(',', '', $amount));
+                        if ($amount >= 10000000) {
+                            return number_format($amount / 10000000, 2) . ' Cr';
+                        } else {
+                            return number_format($amount / 100000, 2) . ' Lakh';
+                        }
+                    }
+                }
+?>
                 <p class="text-dark lh-lg mt-2">
                     This <strong><?= esc($property['property_type']) ?></strong> property
                     (<?= esc($property['property_type_detail']) ?>) is located in a prime area of
                     <strong><?= esc($property['location']) ?></strong>, with a price range starting from
-                    <span class="text-success fw-semibold">₹<?= $property['start_price'] ?></span> up to
-                    <span class="text-success fw-semibold">₹<?= $property['end_price'] ?></span>.
+                    <span class="text-success fw-semibold">₹<?= formatINR($property['start_price']) ?></span> up to
+                    <span class="text-success fw-semibold">₹<?= formatINR($property['end_price']) ?></span>.
                     The expected possession date is <strong><?= esc($property['possession_date']) ?></strong>.
                 </p>
+
                 <!-- <div class="col-md-12 mb-4">
                     <div class="img-property-slide-wrap">
                         <div class="img-property-slide">
@@ -202,18 +216,18 @@ $bgImage = !empty($images) && count($images) > 0
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                 <?php
-                $review_data = [
-                    ['Land Area', 'Acres', $property['land_area'], $property['avg_land_area']],
-                    ['Clubhouse Area', 'sqft', $property['clubhouse_area'], $property['avg_clubhouse_area']],
-                    ['Park Area', 'Acres', $property['park_area'], $property['avg_park_area']],
-                    ['Open Area', '%', $property['open_area'], $property['avg_open_area']],
-                    ['Units', '', $property['units'], $property['avg_units']],
-                    ['Price Per Sq.Ft.', '₹', $property['price_per_sqft'], $property['avg_price_per_sqft']],
-                    ['Clubhouse Factor', 'sqft / unit', $property['clubhouse_factor'], $property['avg_clubhouse_factor']],
-                    ['Closest Metro', 'km', $property['metro_distance'], $property['avg_metro_distance'], true],
-                    ['Approach Road', 'meters', $property['road_width'], $property['avg_road_width']],
-                    ['Unit Density', 'units/acre', $property['unit_density'], $property['avg_unit_density']],
-                ];
+$review_data = [
+    ['Land Area', 'Acres', $property['land_area'], $property['avg_land_area']],
+    ['Clubhouse Area', 'sqft', $property['clubhouse_area'], $property['avg_clubhouse_area']],
+    ['Park Area', 'Acres', $property['park_area'], $property['avg_park_area']],
+    ['Open Area', '%', $property['open_area'], $property['avg_open_area']],
+    ['Units', '', $property['units'], $property['avg_units']],
+    ['Price Per Sq.Ft.', '₹', $property['price_per_sqft'], $property['avg_price_per_sqft']],
+    ['Clubhouse Factor', 'sqft / unit', $property['clubhouse_factor'], $property['avg_clubhouse_factor']],
+    ['Closest Metro', 'km', $property['metro_distance'], $property['avg_metro_distance'], true],
+    ['Approach Road', 'meters', $property['road_width'], $property['avg_road_width']],
+    ['Unit Density', 'units/acre', $property['unit_density'], $property['avg_unit_density']],
+];
 
 foreach ($review_data as $data) {
     [$title, $unit, $value, $avg, $lower_is_better] = array_pad($data, 5, false);
