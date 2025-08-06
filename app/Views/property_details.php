@@ -2,6 +2,19 @@
     .bg-light {
         background-color: #f5f5f5 !important;
     }
+    .sticky-tabs {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .placeholder-space {
+    height: 0;
+    }
 </style>
 <!-- Hero Section with Breadcrumb -->
 <?php
@@ -10,32 +23,58 @@ $bgImage = !empty($images) && count($images) > 0
     : base_url('uploads/properties/default.jpg');
 ?>
 
-<div class="hero page-inner overlay"
-    style="background-image: url('<?= $bgImage ?>'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-
-    <div class="container">
-        <div class="row justify-content-center align-items-center">
-            <div class="col-lg-9 text-center mt-5">
-                <h1 class="heading" data-aos="fade-up">
-                    <?= esc($property['name']) ?>
-                </h1>
-
-                <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
-                    <ol class="breadcrumb text-center justify-content-center">
-                        <li class="breadcrumb-item"><a href="<?= base_url('/') ?>">Home</a></li>
-                        <li class="breadcrumb-item"><a href="<?= base_url('properties') ?>">Properties</a></li>
-                        <li class="breadcrumb-item active text-white-50" aria-current="page">
-                            <?= esc($property['name']) ?>
-                        </li>
-                    </ol>
-                </nav>
+<div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3500">
+    <div class="carousel-inner">
+        <?php if (!empty($images) && count($images) > 0): ?>
+            <?php foreach ($images as $index => $img): ?>
+                <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                    <div class="hero page-inner overlay d-flex align-items-center"
+                         style="height: 60vh; background-image: url('<?= base_url('uploads/properties/' . $img['image']) ?>'); background-size: cover; background-position: center;">
+                        <div class="container">
+                            <div class="row justify-content-center align-items-center">
+                                <div class="col-lg-9 text-center">
+                                    <h1 class="heading text-white" data-aos="fade-up"><?= esc($property['name']) ?></h1>
+                                    <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+                                        <ol class="breadcrumb text-center justify-content-center">
+                                            <li class="breadcrumb-item"><a href="<?= base_url('/') ?>" class="text-white">Home</a></li>
+                                            <li class="breadcrumb-item"><a href="<?= base_url('properties') ?>" class="text-white">Properties</a></li>
+                                            <li class="breadcrumb-item active text-white-50" aria-current="page"><?= esc($property['name']) ?></li>
+                                        </ol>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="carousel-item active">
+                <div class="hero page-inner overlay d-flex align-items-center"
+                     style="height: 60vh; background-image: url('<?= base_url('uploads/properties/default.jpg') ?>'); background-size: cover; background-position: center;">
+                    <div class="container">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-lg-9 text-center">
+                                <h1 class="heading text-white"><?= esc($property['name']) ?></h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        <?php endif; ?>
     </div>
-</div>
 
+    <!-- Optional arrow buttons -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
 <!-- Navigation Tabs -->
-<div class="row">
+<div class="row" id="tabsWrapper">
     <div class="col-lg-12">
         <div class="card shadow-sm border-0">
             <div class="card-body">
@@ -121,7 +160,7 @@ $bgImage = !empty($images) && count($images) > 0
     <div class="tab-pane fade show active" id="main_overview">
         <div class="container py-4">
             <div class="row">
-                <h2 class="fw-bold text-primary mb-2 text-center"><?= esc($property['name']) ?></h2>
+                <h1 class="text-primary mb-2 text-center"><?= esc($property['name']) ?></h1>
                 <p class="text-muted fs-6 mb-2 text-center"><?= esc($property['location']) ?></p>
                 <p class="text-dark lh-lg mt-2">
                     This <strong><?= esc($property['property_type']) ?></strong> property
@@ -130,11 +169,8 @@ $bgImage = !empty($images) && count($images) > 0
                     <span class="text-success fw-semibold">₹<?= $property['start_price'] ?></span> up to
                     <span class="text-success fw-semibold">₹<?= $property['end_price'] ?></span>.
                     The expected possession date is <strong><?= esc($property['possession_date']) ?></strong>.
-                    This project is currently rated <strong><?= esc($property['rating'] ?? 'N/A') ?>/5</strong>
-                    based on
-                    various factors.
                 </p>
-                <div class="col-md-12 mb-4">
+                <!-- <div class="col-md-12 mb-4">
                     <div class="img-property-slide-wrap">
                         <div class="img-property-slide">
                             <?php if (!empty($images) && count($images) > 0): ?>
@@ -149,7 +185,7 @@ $bgImage = !empty($images) && count($images) > 0
                             <?php endif; ?>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 
@@ -207,10 +243,10 @@ foreach ($review_data as $data) {
                 <?php } ?>
             </div>
 
-            <div class="d-flex flex-wrap gap-3 mt-5">
+            <!-- <div class="d-flex flex-wrap gap-3 mt-5">
                 <a href="#insights" class="btn btn-dark px-4 py-2">See Property Insights</a>
                 <a href="#compare" class="btn btn-outline-dark px-4 py-2">Compare With Peers</a>
-            </div>
+            </div> -->
         </div>
     </div>
 <!-- Lightbox Modal -->
@@ -1175,4 +1211,30 @@ $amenity_images = [
         updateSizeDropdown(filterType.value);
         filterFloorPlans();
     });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const tabsWrapper = document.getElementById("tabsWrapper");
+    const tabsOffsetTop = tabsWrapper.offsetTop;
+    const placeholder = document.createElement("div");
+
+    placeholder.classList.add("placeholder-space");
+    placeholder.style.height = tabsWrapper.offsetHeight + "px";
+
+    window.addEventListener("scroll", function () {
+      if (window.scrollY >= tabsOffsetTop) {
+        if (!tabsWrapper.classList.contains("sticky-tabs")) {
+          tabsWrapper.classList.add("sticky-tabs");
+          tabsWrapper.parentNode.insertBefore(placeholder, tabsWrapper);
+        }
+      } else {
+        if (tabsWrapper.classList.contains("sticky-tabs")) {
+          tabsWrapper.classList.remove("sticky-tabs");
+          if (placeholder.parentNode) {
+            placeholder.parentNode.removeChild(placeholder);
+          }
+        }
+      }
+    });
+  });
 </script>
