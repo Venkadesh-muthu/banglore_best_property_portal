@@ -148,21 +148,24 @@
                                     <div class="row mt-3">
                                         <div class="col-6">
                                             <label class="form-label">Start Price (₹)</label>
-                                            <input type="text" name="start_price" class="form-control"
-                                                value="<?= esc($property['start_price']) ?>">
+                                            <input type="text" name="start_price" id="startPrice" class="form-control"
+                                            value="<?= esc(number_format($property['start_price'], 0, '', ',')) ?>">
+                                            <small id="startPriceError" class="text-danger"></small>
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label">End Price (₹)</label>
-                                            <input type="text" name="end_price" class="form-control"
-                                                value="<?= esc($property['end_price']) ?>">
+                                            <input type="text" name="end_price" id="endPrice" class="form-control"
+                                            value="<?= esc(number_format($property['end_price'], 0, '', ',')) ?>">
+                                            <small id="endPriceError" class="text-danger"></small>
                                         </div>
                                     </div>
 
+
                                     <?php
                                     $propertyType = $property['property_type'] ?? '';
-                                    $propertyDetail = $property['property_type_detail'] ?? '';
-                                    $propertyTypeDetails = explode(',', $propertyDetail);
-                                    ?>
+                $propertyDetail = $property['property_type_detail'] ?? '';
+                $propertyTypeDetails = explode(',', $propertyDetail);
+                ?>
 
                                     <div class="row mt-3">
                                         <div class="col-6">
@@ -170,67 +173,67 @@
                                             <select name="property_type" id="property_type" class="form-select">
                                                 <option value="">Select type</option>
                                                 <?php
-                                                $types = ['apartment', 'villa', 'plot'];
-                                                foreach ($types as $type) {
-                                                    $selected = ($propertyType === $type) ? 'selected' : '';
-                                                    echo '<option value="' . $type . '" ' . $selected . '>' . ucfirst($type) . '</option>';
-                                                }
-                                                ?>
+                            $types = ['apartment', 'villa', 'plot'];
+                foreach ($types as $type) {
+                    $selected = ($propertyType === $type) ? 'selected' : '';
+                    echo '<option value="' . $type . '" ' . $selected . '>' . ucfirst($type) . '</option>';
+                }
+                ?>
                                             </select>
 
                                             <!-- Apartment Types -->
                                             <?php
                                             $apartmentTypes = ['Studio', '1BHK', '1.5BHK', '2BHK', '2.5BHK', '3BHK', '3.5BHK', '4BHK', '4.5BHK', '5BHK'];
-                                            ?>
+                ?>
                                             <div id="apartmentTypes" class="mt-2" style="display: none;">
                                                 <label class="form-label d-block">Apartment Type</label>
                                                 <?php
-                                                foreach ($apartmentTypes as $type) {
-                                                    $id = 'apt' . preg_replace('/[^a-zA-Z0-9]/', '', $type);
-                                                    $checked = in_array($type, $propertyTypeDetails) ? 'checked' : '';
-                                                    echo '<div class="form-check form-check-inline">';
-                                                    echo '<input class="form-check-input" type="checkbox" id="' . $id . '" name="apartment_type[]" value="' . $type . '" ' . $checked . '>';
-                                                    echo '<label class="form-check-label" for="' . $id . '">' . $type . '</label>';
-                                                    echo '</div>';
-                                                }
-                                                ?>
+                    foreach ($apartmentTypes as $type) {
+                        $id = 'apt' . preg_replace('/[^a-zA-Z0-9]/', '', $type);
+                        $checked = in_array($type, $propertyTypeDetails) ? 'checked' : '';
+                        echo '<div class="form-check form-check-inline">';
+                        echo '<input class="form-check-input" type="checkbox" id="' . $id . '" name="apartment_type[]" value="' . $type . '" ' . $checked . '>';
+                        echo '<label class="form-check-label" for="' . $id . '">' . $type . '</label>';
+                        echo '</div>';
+                    }
+                ?>
                                             </div>
 
                                             <!-- Villa Types -->
                                             <?php
                                             $villaTypes = ['3BHK', '3.5BHK', '4BHK', '4.5BHK', '5BHK'];
-                                            ?>
+                ?>
                                             <div id="villaTypes" class="mt-2" style="display: none;">
                                                 <label class="form-label d-block">Villa Type</label>
                                                 <?php
-                                                foreach ($villaTypes as $type) {
-                                                    $id = 'villa' . preg_replace('/[^a-zA-Z0-9]/', '', $type);
-                                                    $checked = in_array($type, $propertyTypeDetails) ? 'checked' : '';
-                                                    echo '<div class="form-check form-check-inline">';
-                                                    echo '<input class="form-check-input" type="checkbox" id="' . $id . '" name="villa_type[]" value="' . $type . '" ' . $checked . '>';
-                                                    echo '<label class="form-check-label" for="' . $id . '">' . $type . '</label>';
-                                                    echo '</div>';
-                                                }
-                                                ?>
+                    foreach ($villaTypes as $type) {
+                        $id = 'villa' . preg_replace('/[^a-zA-Z0-9]/', '', $type);
+                        $checked = in_array($type, $propertyTypeDetails) ? 'checked' : '';
+                        echo '<div class="form-check form-check-inline">';
+                        echo '<input class="form-check-input" type="checkbox" id="' . $id . '" name="villa_type[]" value="' . $type . '" ' . $checked . '>';
+                        echo '<label class="form-check-label" for="' . $id . '">' . $type . '</label>';
+                        echo '</div>';
+                    }
+                ?>
                                             </div>
 
                                             <!-- Plot Sizes -->
                                             <?php
                                             $plotSizes = ['30 X 40', '30 X 50', '40 X 60'];
-                                            $selectedPlots = ($propertyType === 'plot' && is_array($propertyTypeDetails)) ? $propertyTypeDetails : [];
-                                            ?>
+                $selectedPlots = ($propertyType === 'plot' && is_array($propertyTypeDetails)) ? $propertyTypeDetails : [];
+                ?>
                                             <div id="plotInput" class="mt-2" style="display: none;">
                                                 <label class="form-label d-block">Plot Sizes</label>
                                                 <?php
-                                                foreach ($plotSizes as $size) {
-                                                    $id = 'plot' . preg_replace('/[^a-zA-Z0-9]/', '', $size);
-                                                    $checked = in_array($size, $selectedPlots) ? 'checked' : '';
-                                                    echo '<div class="form-check form-check-inline">';
-                                                    echo '<input class="form-check-input" type="checkbox" id="' . $id . '" name="plot_type[]" value="' . $size . '" ' . $checked . '>';
-                                                    echo '<label class="form-check-label" for="' . $id . '">' . $size . '</label>';
-                                                    echo '</div>';
-                                                }
-                                                ?>
+                    foreach ($plotSizes as $size) {
+                        $id = 'plot' . preg_replace('/[^a-zA-Z0-9]/', '', $size);
+                        $checked = in_array($size, $selectedPlots) ? 'checked' : '';
+                        echo '<div class="form-check form-check-inline">';
+                        echo '<input class="form-check-input" type="checkbox" id="' . $id . '" name="plot_type[]" value="' . $size . '" ' . $checked . '>';
+                        echo '<label class="form-check-label" for="' . $id . '">' . $size . '</label>';
+                        echo '</div>';
+                    }
+                ?>
                                             </div>
                                         </div>
                                     </div>
@@ -498,13 +501,13 @@
                                             'Heated Pool'
                                         ];
 
-                                        $selectedLifestyle = [];
-                                        $rareLifestyle = [];
-                                        foreach ($grouped_amenities['lifestyle'] ?? [] as $a) {
-                                            $selectedLifestyle[$a['name']] = true;
-                                            $rareLifestyle[$a['name']] = $a['rare'] ?? 'NORMAL';
-                                        }
-                                        ?>
+                $selectedLifestyle = [];
+                $rareLifestyle = [];
+                foreach ($grouped_amenities['lifestyle'] ?? [] as $a) {
+                    $selectedLifestyle[$a['name']] = true;
+                    $rareLifestyle[$a['name']] = $a['rare'] ?? 'NORMAL';
+                }
+                ?>
                                         <div class="tab-pane fade show active" id="pills-lifestyle" role="tabpanel">
                                             <div class="row">
                                                 <?php foreach ($lifestyleItems as $item):
@@ -552,17 +555,17 @@
                                             'Volleyball Net'
                                         ];
 
-                                        $selectedSports = [];
-                                        $rareSports = [];
-                                        foreach ($grouped_amenities['sports'] ?? [] as $a) {
-                                            $selectedSports[$a['name']] = true;
-                                            $rareSports[$a['name']] = $a['rare'] ?? 'NORMAL';
-                                        }
+                $selectedSports = [];
+                $rareSports = [];
+                foreach ($grouped_amenities['sports'] ?? [] as $a) {
+                    $selectedSports[$a['name']] = true;
+                    $rareSports[$a['name']] = $a['rare'] ?? 'NORMAL';
+                }
 
-                                        foreach ($sportsItems as $item):
-                                            $isChecked = isset($selectedSports[$item]);
-                                            $rareValue = $rareSports[$item] ?? '';
-                                            ?>
+                foreach ($sportsItems as $item):
+                    $isChecked = isset($selectedSports[$item]);
+                    $rareValue = $rareSports[$item] ?? '';
+                    ?>
                                             <div class="col-md-4 mb-3">
                                                 <div class="d-flex align-items-center">
                                                     <div class="form-check me-2">
@@ -590,17 +593,17 @@
                                         <?php
                                         $naturalItems = ['Lake', 'Forest', 'Army Land', 'Mountain/Hill', 'Golf Course', 'Park Area'];
 
-                                        $selectedNatural = [];
-                                        $rareNatural = [];
-                                        foreach ($grouped_amenities['natural'] ?? [] as $a) {
-                                            $selectedNatural[$a['name']] = true;
-                                            $rareNatural[$a['name']] = $a['rare'] ?? 'NORMAL';
-                                        }
+                $selectedNatural = [];
+                $rareNatural = [];
+                foreach ($grouped_amenities['natural'] ?? [] as $a) {
+                    $selectedNatural[$a['name']] = true;
+                    $rareNatural[$a['name']] = $a['rare'] ?? 'NORMAL';
+                }
 
-                                        foreach ($naturalItems as $item):
-                                            $isChecked = isset($selectedNatural[$item]);
-                                            $rareValue = $rareNatural[$item] ?? '';
-                                            ?>
+                foreach ($naturalItems as $item):
+                    $isChecked = isset($selectedNatural[$item]);
+                    $rareValue = $rareNatural[$item] ?? '';
+                    ?>
                                             <div class="col-md-4 mb-3">
                                                 <div class="d-flex align-items-center">
                                                     <div class="form-check me-2">
@@ -637,37 +640,37 @@
                                     }
                                     echo "</div>";
                                 }
-                                ?>
+                ?>
 
                                 <!-- Specifications -->
                                 <div class="tab-pane fade" id="pills-spec" role="tabpanel">
                                     <?php
-                                    inputBlock('🧱 Flooring', 'flooring', [
-                                        'Living Room' => 'Vitrified',
-                                        'Bedroom' => 'Vitrified',
-                                        'Master Bedroom' => 'Vitrified',
-                                        'Kitchen' => 'Ceramic Flooring + Wall Tile',
-                                        'Toilets' => 'Ceramic Flooring + Wall Tile'
-                                    ], $specifications['flooring'] ?? []);
+                    inputBlock('🧱 Flooring', 'flooring', [
+                        'Living Room' => 'Vitrified',
+                        'Bedroom' => 'Vitrified',
+                        'Master Bedroom' => 'Vitrified',
+                        'Kitchen' => 'Ceramic Flooring + Wall Tile',
+                        'Toilets' => 'Ceramic Flooring + Wall Tile'
+                    ], $specifications['flooring'] ?? []);
 
-                                    inputBlock('🚪 Doors & Windows', 'doors', [
-                                        'Toilets' => 'Engineered Wood',
-                                        'Balcony Door' => 'UPVC Sliding Door',
-                                        'Window' => 'UPVC Sliding Door',
-                                        'Main Door' => 'Polished Teak Wood',
-                                        'Internal Door' => 'Timber With Both Side Laminated'
-                                    ], $specifications['doors'] ?? []);
+                inputBlock('🚪 Doors & Windows', 'doors', [
+                    'Toilets' => 'Engineered Wood',
+                    'Balcony Door' => 'UPVC Sliding Door',
+                    'Window' => 'UPVC Sliding Door',
+                    'Main Door' => 'Polished Teak Wood',
+                    'Internal Door' => 'Timber With Both Side Laminated'
+                ], $specifications['doors'] ?? []);
 
-                                    inputBlock('🎨 Paint', 'paint', [
-                                        'Internal Paint' => 'Plastic Emulsion',
-                                        'External Paint' => 'Acrylic Emulsion'
-                                    ], $specifications['paint'] ?? []);
+                inputBlock('🎨 Paint', 'paint', [
+                    'Internal Paint' => 'Plastic Emulsion',
+                    'External Paint' => 'Acrylic Emulsion'
+                ], $specifications['paint'] ?? []);
 
-                                    inputBlock('🔧 Others', 'others', [
-                                        'Construction Technology' => 'RCC Framed Structure',
-                                        'Sanitary Fittings' => 'Chromium Plated'
-                                    ], $specifications['others'] ?? []);
-                                    ?>
+                inputBlock('🔧 Others', 'others', [
+                    'Construction Technology' => 'RCC Framed Structure',
+                    'Sanitary Fittings' => 'Chromium Plated'
+                ], $specifications['others'] ?? []);
+                ?>
                                 </div>
                             </div>
                         </div>
@@ -1159,4 +1162,45 @@
         // Render existing floor plans on load
         existingFloorPlans.forEach(plan => createFloorPlanBlock(plan));
     });
+</script>
+<script>
+  const startInput = document.getElementById('startPrice');
+  const endInput = document.getElementById('endPrice');
+  const startError = document.getElementById('startPriceError');
+  const endError = document.getElementById('endPriceError');
+
+  // Format to Indian numbering (e.g., 1,00,000)
+  function formatToINR(num) {
+    return num.toLocaleString('en-IN');
+  }
+
+  function validatePrices() {
+    let rawStart = startInput.value.replace(/,/g, '');
+    let rawEnd = endInput.value.replace(/,/g, '');
+
+    let startVal = parseInt(rawStart) || 0;
+    let endVal = parseInt(rawEnd) || 0;
+
+    // Format while typing
+    if (rawStart) startInput.value = formatToINR(startVal);
+    if (rawEnd) endInput.value = formatToINR(endVal);
+
+    // Start Price ≥ ₹1 Lakh (1,00,000)
+    if (startVal < 100000) {
+      startError.textContent = 'Starting Price must be at least ₹1 Lakh (₹1,00,000)';
+    } else {
+      startError.textContent = '';
+    }
+
+    // End Price must be > Start Price
+    if (endVal && endVal <= startVal) {
+      endError.textContent = 'Ending Price must be greater than Starting Price';
+    } else {
+      endError.textContent = '';
+    }
+  }
+
+  startInput.addEventListener('input', validatePrices);
+  endInput.addEventListener('input', validatePrices);
+  window.addEventListener('DOMContentLoaded', validatePrices);
 </script>

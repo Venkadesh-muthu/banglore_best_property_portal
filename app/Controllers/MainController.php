@@ -65,6 +65,7 @@ class MainController extends BaseController
     }
     public function index(): string
     {
+        helper('custom');
         $properties = $this->propertyModel
                    ->orderBy('id', 'DESC') // Replace 'id' with 'created_at' if needed
                    ->findAll(6);

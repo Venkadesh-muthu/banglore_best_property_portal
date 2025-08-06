@@ -150,18 +150,15 @@
                                     </div>
 
                                     <div class="row mt-3">
-                                        <!-- Starting Price -->
                                         <div class="col-md-6">
-                                            <label for="startPrice" class="form-label">Starting Price (₹)</label>
-                                            <input type="text" class="form-control" id="startPrice" name="start_price"
-                                                placeholder="e.g., 5000000">
+                                        <label for="startPrice" class="form-label">Starting Price (₹)</label>
+                                        <input type="text" class="form-control" id="startPrice" name="start_price" placeholder="e.g., 10000000">
+                                        <div id="startPriceError" class="text-danger small mt-1"></div>
                                         </div>
-
-                                        <!-- Ending Price -->
                                         <div class="col-md-6">
-                                            <label for="endPrice" class="form-label">Ending Price (₹)</label>
-                                            <input type="text" class="form-control" id="endPrice" name="end_price"
-                                                placeholder="e.g., 10000000">
+                                        <label for="endPrice" class="form-label">Ending Price (₹)</label>
+                                        <input type="text" class="form-control" id="endPrice" name="end_price" placeholder="e.g., 20000000">
+                                        <div id="endPriceError" class="text-danger small mt-1"></div>
                                         </div>
                                     </div>
 
@@ -573,7 +570,7 @@
                                             'Kitchen' => 'Ceramic Flooring + Wall Tile',
                                             'Toilets' => 'Ceramic Flooring + Wall Tile'
                                         ];
-                                        foreach ($flooring as $room => $default): ?>
+                            foreach ($flooring as $room => $default): ?>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label"><?= $room ?></label>
                                                 <input type="text" name="specifications[flooring][<?= $room ?>]"
@@ -586,14 +583,14 @@
                                     <h6 class="mb-3 mt-4">🚪 Doors & Windows</h6>
                                     <div class="row">
                                         <?php
-                                        $doors = [
-                                            'Toilets' => 'Engineered Wood',
-                                            'Balcony Door' => 'UPVC Sliding Door',
-                                            'Window' => 'UPVC Sliding Door',
-                                            'Main Door' => 'Polished Teak Wood',
-                                            'Internal Door' => 'Timber With Both Side Laminated'
-                                        ];
-                                        foreach ($doors as $part => $default): ?>
+                            $doors = [
+                                'Toilets' => 'Engineered Wood',
+                                'Balcony Door' => 'UPVC Sliding Door',
+                                'Window' => 'UPVC Sliding Door',
+                                'Main Door' => 'Polished Teak Wood',
+                                'Internal Door' => 'Timber With Both Side Laminated'
+                            ];
+                            foreach ($doors as $part => $default): ?>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label"><?= $part ?></label>
                                                 <input type="text" name="specifications[doors][<?= $part ?>]"
@@ -606,11 +603,11 @@
                                     <h6 class="mb-3 mt-4">🎨 Paint</h6>
                                     <div class="row">
                                         <?php
-                                        $paint = [
-                                            'Internal Paint' => 'Plastic Emulsion',
-                                            'External Paint' => 'Acrylic Emulsion'
-                                        ];
-                                        foreach ($paint as $type => $default): ?>
+                            $paint = [
+                                'Internal Paint' => 'Plastic Emulsion',
+                                'External Paint' => 'Acrylic Emulsion'
+                            ];
+                            foreach ($paint as $type => $default): ?>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label"><?= $type ?></label>
                                                 <input type="text" name="specifications[paint][<?= $type ?>]"
@@ -623,11 +620,11 @@
                                     <h6 class="mb-3 mt-4">🔧 Others</h6>
                                     <div class="row">
                                         <?php
-                                        $others = [
-                                            'Construction Technology' => 'RCC Framed Structure',
-                                            'Sanitary Fittings' => 'Chromium Plated'
-                                        ];
-                                        foreach ($others as $type => $default): ?>
+                            $others = [
+                                'Construction Technology' => 'RCC Framed Structure',
+                                'Sanitary Fittings' => 'Chromium Plated'
+                            ];
+                            foreach ($others as $type => $default): ?>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label"><?= $type ?></label>
                                                 <input type="text" name="specifications[others][<?= $type ?>]"
@@ -665,7 +662,7 @@
                                     ['title' => 'Fire NOC', 'approved_by' => 'KSFESD', 'status' => 'Approved'],
                                 ];
 
-                                foreach ($legalApprovals as $index => $item): ?>
+                            foreach ($legalApprovals as $index => $item): ?>
                                     <div class="row mb-4 border-bottom pb-3">
                                         <div class="col-md-4">
                                             <label class="form-label">Approval Title</label>
@@ -705,40 +702,40 @@
                             <h5 class="card-title">Micro Market Documents</h5>
                             <div class="row g-4">
                                 <?php
-                                // Default micro market document entries
-                                $microMarketDocuments = $microMarketDocuments ?? [
-                                    [
-                                        'title' => 'City Development Plan',
-                                        'description' => 'Used to identify land types, flood risks, etc.',
-                                        'link_text' => 'Unlock & Analyze CDP',
-                                        'link_url' => '#',
-                                    ],
-                                    [
-                                        'title' => 'Marketing Brochure',
-                                        'description' => 'Everything about the project from builder\'s view',
-                                        'link_text' => 'No Document',
-                                        'link_url' => '#',
-                                    ],
-                                    [
-                                        'title' => 'Legal Opinion',
-                                        'description' => 'Litigations by builder. Not a clean title doc.',
-                                        'link_text' => 'See Document',
-                                        'link_url' => '#',
-                                    ],
-                                    [
-                                        'title' => 'Development Rights',
-                                        'description' => 'Terms between landowner & builder.',
-                                        'link_text' => 'See Document',
-                                        'link_url' => '#',
-                                    ],
-                                ];
+                            // Default micro market document entries
+                            $microMarketDocuments = $microMarketDocuments ?? [
+                                [
+                                    'title' => 'City Development Plan',
+                                    'description' => 'Used to identify land types, flood risks, etc.',
+                                    'link_text' => 'Unlock & Analyze CDP',
+                                    'link_url' => '#',
+                                ],
+                                [
+                                    'title' => 'Marketing Brochure',
+                                    'description' => 'Everything about the project from builder\'s view',
+                                    'link_text' => 'No Document',
+                                    'link_url' => '#',
+                                ],
+                                [
+                                    'title' => 'Legal Opinion',
+                                    'description' => 'Litigations by builder. Not a clean title doc.',
+                                    'link_text' => 'See Document',
+                                    'link_url' => '#',
+                                ],
+                                [
+                                    'title' => 'Development Rights',
+                                    'description' => 'Terms between landowner & builder.',
+                                    'link_text' => 'See Document',
+                                    'link_url' => '#',
+                                ],
+                            ];
 
-                                // Default section info
-                                $microMarketSection = $microMarketSection ?? [
-                                    'title' => 'Gunjur',
-                                    'description' => 'Gunjur is a rapidly developing locality in South Bengaluru, known for its residential properties and growing infrastructure. With improved connectivity to major roads and tech parks...',
-                                ];
-                                ?>
+                            // Default section info
+                            $microMarketSection = $microMarketSection ?? [
+                                'title' => 'Gunjur',
+                                'description' => 'Gunjur is a rapidly developing locality in South Bengaluru, known for its residential properties and growing infrastructure. With improved connectivity to major roads and tech parks...',
+                            ];
+                            ?>
 
                                 <?php for ($i = 0; $i < 4; $i++):
                                     $doc = $microMarketDocuments[$i] ?? ['title' => '', 'description' => '', 'link_text' => '', 'link_url' => '', 'icon' => ''];
@@ -1097,3 +1094,45 @@
         document.querySelector('a[href="#main_floor_plan"]').addEventListener("click", populateBHKDropdown);
     });
 </script>
+<script>
+  const startInput = document.getElementById('startPrice');
+  const endInput = document.getElementById('endPrice');
+  const startError = document.getElementById('startPriceError');
+  const endError = document.getElementById('endPriceError');
+
+  // Format to Indian numbering (e.g., 1,00,000)
+  function formatToINR(num) {
+    return num.toLocaleString('en-IN');
+  }
+
+  function validatePrices() {
+    let rawStart = startInput.value.replace(/,/g, '');
+    let rawEnd = endInput.value.replace(/,/g, '');
+
+    let startVal = parseInt(rawStart) || 0;
+    let endVal = parseInt(rawEnd) || 0;
+
+    // Format while typing
+    if (rawStart) startInput.value = formatToINR(startVal);
+    if (rawEnd) endInput.value = formatToINR(endVal);
+
+    // Start Price ≥ ₹1 Lakh (1,00,000)
+    if (startVal < 100000) {
+      startError.textContent = 'Starting Price must be at least ₹1 Lakh (₹1,00,000)';
+    } else {
+      startError.textContent = '';
+    }
+
+    // End Price must be > Start Price
+    if (endVal && endVal <= startVal) {
+      endError.textContent = 'Ending Price must be greater than Starting Price';
+    } else {
+      endError.textContent = '';
+    }
+  }
+
+  startInput.addEventListener('input', validatePrices);
+  endInput.addEventListener('input', validatePrices);
+  window.addEventListener('DOMContentLoaded', validatePrices);
+</script>
+

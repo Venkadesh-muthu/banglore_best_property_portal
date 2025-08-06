@@ -28,27 +28,45 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link <?= in_array($title, ['About Us', 'Features', 'Team', 'Statistics']) ? '' : 'collapsed' ?>" data-bs-toggle="collapse" href="#aboutSubMenu" role="button" aria-expanded="false" aria-controls="aboutSubMenu">
+            <a class="nav-link <?= in_array($title, ['About Us', 'Features', 'Team', 'Statistics']) ? '' : 'collapsed' ?>" 
+            data-bs-toggle="collapse" 
+            href="#aboutSubMenu" 
+            role="button" 
+            aria-expanded="<?= in_array($title, ['About Us', 'Features', 'Team', 'Statistics']) ? 'true' : 'false' ?>" 
+            aria-controls="aboutSubMenu">
                 <i class="bi bi-info-circle"></i>
                 <span>About Us</span>
             </a>
-            <div class="collapse <?= in_array($title, ['About Us', 'Features', 'Team', 'Statistics']) ? 'show' : '' ?>" id="aboutSubMenu">
-                <ul class="nav flex-column ps-3">
+            <div class="collapse <?= in_array($title, ['About Us', 'Features', 'Team', 'Statistics']) ? 'show' : '' ?>" 
+                id="aboutSubMenu">
+                <ul class="nav flex-column ps-3 mt-1">
                     <li class="nav-item">
-                        <a class="nav-link <?= ($title == 'About Us') ? 'active' : '' ?>" href="<?= base_url('admin/about') ?>">About Section</a>
+                        <a class="nav-link <?= ($title == 'About Us') ? 'active' : '' ?>" href="<?= base_url('admin/about') ?>">
+                            About Section
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= ($title == 'Features') ? 'active' : '' ?>" href="<?= base_url('admin/features') ?>">Features</a>
+                        <a class="nav-link <?= ($title == 'Features') ? 'active' : '' ?>" href="<?= base_url('admin/features') ?>">
+                            Features
+                        </a>
                     </li>
+                    <!-- Uncomment when needed -->
+                    <!--
                     <li class="nav-item">
-                        <a class="nav-link <?= ($title == 'Team') ? 'active' : '' ?>" href="<?= base_url('admin/team') ?>">Team Members</a>
+                        <a class="nav-link <?= ($title == 'Team') ? 'active' : '' ?>" href="<?= base_url('admin/team') ?>">
+                            Team Members
+                        </a>
                     </li>
+                    -->
                     <li class="nav-item">
-                        <a class="nav-link <?= ($title == 'Statistics') ? 'active' : '' ?>" href="<?= base_url('admin/statistics') ?>">Statistics</a>
+                        <a class="nav-link <?= ($title == 'Statistics') ? 'active' : '' ?>" href="<?= base_url('admin/statistics') ?>">
+                            Statistics
+                        </a>
                     </li>
                 </ul>
             </div>
         </li>
+
 
 
         <li class="nav-item">
@@ -70,7 +88,7 @@
         <li class="nav-heading">Pages</li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="users-profile.html">
+            <a class="nav-link collapsed" href="<?= base_url('admin/profile') ?>">
                 <i class="bi bi-person"></i>
                 <span>Profile</span>
             </a>

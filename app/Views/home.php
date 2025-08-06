@@ -84,13 +84,31 @@
                                     color: #fff;
                                     font-size: 13px;
                                 ">
+                                    <?php
+                                        if (!function_exists('formatINR')) {
+                                            function formatINR($amount)
+                                            {
+                                                $amount = floatval(str_replace(',', '', $amount)); // remove commas, cast to float
+
+                                                if ($amount >= 10000000) {
+                                                    return number_format($amount / 10000000, 2) . ' Cr';
+                                                } else {
+                                                    return number_format($amount / 100000, 2) . ' Lakh';
+                                                }
+                                            }
+                                        }
+                ?>
+
+
+
                                     <div class="d-flex justify-content-between">
                                         <strong><?= esc($property['name']) ?></strong>
                                         <span>
-                                            ₹<?= number_format($property['start_price']) ?> - 
-                                            ₹<?= number_format($property['end_price']) ?> Cr
+                                            ₹<?= formatINR($property['start_price']) ?> - ₹<?= formatINR($property['end_price']) ?>
                                         </span>
+
                                     </div>
+
                                 </div>
                             </div>
 

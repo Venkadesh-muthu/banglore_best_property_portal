@@ -128,6 +128,33 @@ class AdminController extends BaseController
 
         return view('admin/layout/templates', $data);
     }
+    public function profile()
+    {
+        if (!session()->get('isAdminLoggedIn')) {
+            return redirect()->to('/admin');
+        }
+
+        // Use 'adminUser' instead of 'admin_id'
+        $adminUser = session()->get('adminUser');
+        $adminId = $adminUser['id'] ?? null;
+
+        if (!$adminId) {
+            return redirect()->to('/admin')->with('error', 'Session expired. Please login again.');
+        }
+
+        // Safe: returns flat array
+        $user = $this->adminModel->find($adminId);
+
+        $data = [
+            'title'   => 'Profile',
+            'admin'   => $user,
+            'name'    => $user['username'] ?? 'Admin',
+            'content' => 'admin/profile_view',
+        ];
+
+        return view('admin/layout/templates', $data);
+    }
+
 
 
     public function properties()

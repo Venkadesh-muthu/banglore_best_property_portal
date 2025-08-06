@@ -24,6 +24,7 @@ $routes->group('admin', function ($routes) {
     $routes->post('login', 'AdminController::login');
     $routes->get('logout', 'AdminController::logout');
     $routes->get('dashboard', 'AdminController::dashboard');
+    $routes->get('profile', 'AdminController::profile');
     $routes->get('add-property', 'AdminController::add_property');
     $routes->post('save-property', 'AdminController::save_property');
     $routes->get('properties', 'AdminController::properties');
