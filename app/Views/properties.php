@@ -221,13 +221,31 @@
                                         color: #fff;
                                         font-size: 13px;
                                     ">
-                                        <div class="d-flex justify-content-between flex-wrap">
-                                            <strong><?= esc($property['name']) ?></strong>
-                                            <span>
-                                                ₹<?= number_format($property['start_price']) ?> Cr -
-                                                ₹<?= number_format($property['end_price']) ?> Cr
-                                            </span>
-                                        </div>
+                                        <?php
+                                        if (!function_exists('formatINR')) {
+                                            function formatINR($amount)
+                                            {
+                                                $amount = floatval(str_replace(',', '', $amount)); // remove commas, cast to float
+
+                                                if ($amount >= 10000000) {
+                                                    return number_format($amount / 10000000, 2) . ' Cr';
+                                                } else {
+                                                    return number_format($amount / 100000, 2) . ' Lakh';
+                                                }
+                                            }
+                                        }
+                    ?>
+
+
+
+                                    <div class="d-flex justify-content-between">
+                                        <strong><?= esc($property['name']) ?></strong>
+                                        <span>
+                                            ₹<?= formatINR($property['start_price']) ?> - ₹<?= formatINR($property['end_price']) ?>
+                                        </span>
+
+                                    </div>
+
                                     </div>
                                 </div>
 
@@ -293,9 +311,9 @@
                             <option value="">Min Budget</option>
                             <?php foreach ($minBudgets as $val): ?>
                                 <?php
-                                    $display = $val >= 10000000
-                                        ? rtrim(rtrim(number_format($val / 10000000, 2), '0'), '.') . ' Cr'
-                                        : rtrim(rtrim(number_format($val / 100000, 2), '0'), '.') . ' L';
+                                        $display = $val >= 10000000
+                                            ? rtrim(rtrim(number_format($val / 10000000, 2), '0'), '.') . ' Cr'
+                                            : rtrim(rtrim(number_format($val / 100000, 2), '0'), '.') . ' L';
                                 ?>
                                 <option value="<?= $val ?>" <?= ($filters['min_budget'] ?? '') == $val ? 'selected' : '' ?>>
                                     <?= $display ?>
