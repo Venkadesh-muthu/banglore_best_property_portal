@@ -73,11 +73,29 @@
                                 <td><?= esc($property1['location']) ?></td>
                                 <td><?= esc($property2['location']) ?></td>
                             </tr>
+                            <?php
+                                if (!function_exists('formatINR')) {
+                                    function formatINR($amount)
+                                    {
+                                        $amount = floatval(str_replace(',', '', $amount)); // Ensure it's a float
+
+                                        if ($amount >= 10000000) {
+                                            return number_format($amount / 10000000, 2) . ' Cr';
+                                        } elseif ($amount >= 100000) {
+                                            return number_format($amount / 100000, 2) . ' Lakh';
+                                        } else {
+                                            return number_format($amount);
+                                        }
+                                    }
+                                }
+                    ?>
+
                             <tr>
                                 <th>💰 Price Range</th>
-                                <td>₹<?= number_format($property1['start_price']) ?> - ₹<?= number_format($property1['end_price']) ?></td>
-                                <td>₹<?= number_format($property2['start_price']) ?> - ₹<?= number_format($property2['end_price']) ?></td>
+                                <td>₹<?= formatINR($property1['start_price']) ?> - ₹<?= formatINR($property1['end_price']) ?></td>
+                                <td>₹<?= formatINR($property2['start_price']) ?> - ₹<?= formatINR($property2['end_price']) ?></td>
                             </tr>
+
                             <tr>
                                 <th>📏 Land Area</th>
                                 <td><?= esc($property1['land_area']) ?> sqft</td>
