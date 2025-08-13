@@ -20,11 +20,13 @@ use App\Models\StatisticModel;
 use App\Models\TeamMemberModel;
 use App\Models\ResourceModel;
 use App\Models\ContactUsModel;
+use App\Models\PropertyVideoModel;
 
 class MainController extends BaseController
 {
     protected $propertyModel;
     protected $propertyImageModel;
+    protected $propertyVideoModel;
     protected $masterPlanModel;
     protected $floorPlanModel;
     protected $floorPlanImageModel;
@@ -46,6 +48,7 @@ class MainController extends BaseController
     {
         $this->propertyModel = new PropertyModel();
         $this->propertyImageModel = new PropertyImageModel();
+        $this->propertyVideoModel = new PropertyVideoModel();
         $this->masterPlanModel = new MasterPlanModel();
         $this->floorPlanModel = new FloorPlanModel();
         $this->floorPlanImageModel = new FloorPlanImageModel();
@@ -315,6 +318,10 @@ class MainController extends BaseController
             ->where('property_id', $id)
             ->findAll();
 
+        $videos = $this->propertyVideoModel
+        ->where('property_id', $id)
+        ->findAll();
+
         // Get master plan images
         $master_plan_images = $this->masterPlanModel
             ->where('property_id', $id)
@@ -494,6 +501,7 @@ class MainController extends BaseController
             'content' => 'property_details',
             'property' => $property,
             'images' => $images,
+            'videos' => $videos,
             'master_plan_image' => $master_plan_images,
             'floor_plans' => $floor_plans,
             'grouped_amenities' => $grouped_amenities,

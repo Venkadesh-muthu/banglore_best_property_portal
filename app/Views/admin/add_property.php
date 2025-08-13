@@ -277,6 +277,19 @@
                                             </div>
 
                                         </div>
+                                        <div class="col-md-6">
+                                        <label for="property_videos" class="form-label">Videos (Max 2)</label>
+                                        <input 
+                                            type="file" 
+                                            class="form-control file-upload-check"
+                                            name="property_videos[]" 
+                                            id="property_videos" 
+                                            multiple 
+                                            accept="video/*"
+                                            onchange="limitPropertyVideos(this)">
+                                        <small class="text-muted">You can upload up to 2 videos only.</small>
+                                    </div>
+
                                     </div>
                                     <div class="row mt-3">
                                         <!-- Possession Date -->
@@ -309,7 +322,7 @@
 
                                 <!-- Land Area -->
                                 <div class="col-md-3">
-                                    <b class="form-label">Project Land Area (Acres)</b>
+                                    <b class="form-label">Land Area (Acres)</b>
                                     <input type="hidden" name="label_land_area" value="Land Area">
                                     <input type="text" class="form-control" id="land_area" name="land_area"
                                         placeholder="Acres">
@@ -1135,4 +1148,11 @@
   endInput.addEventListener('input', validatePrices);
   window.addEventListener('DOMContentLoaded', validatePrices);
 </script>
-
+<script>
+function limitPropertyVideos(input) {
+    if (input.files.length > 2) {
+        alert('You can upload a maximum of 2 videos.');
+        input.value = '';
+    }
+}
+</script>

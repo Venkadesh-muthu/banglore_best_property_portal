@@ -22,12 +22,14 @@ use App\Models\TeamMemberModel;
 use App\Models\StatisticModel;
 use App\Models\ResourceModel;
 use App\Models\ContactUsModel;
+use App\Models\PropertyVideoModel;
 use CodeIgniter\Controller;
 
 class AdminController extends BaseController
 {
     protected $propertyModel;
     protected $propertyImageModel;
+    protected $propertyVideoModel;
     protected $adminModel;
     protected $connectivityPointModel;
     protected $masterPlanModel;
@@ -51,6 +53,7 @@ class AdminController extends BaseController
     {
         $this->propertyModel = new PropertyModel();
         $this->propertyImageModel = new PropertyImageModel();
+        $this->propertyVideoModel = new PropertyVideoModel();
         $this->adminModel = new AdminModel();
         $this->connectivityPointModel = new ConnectivityPointModel();
         $this->masterPlanModel = new MasterPlanModel();
@@ -270,6 +273,20 @@ class AdminController extends BaseController
                     $this->propertyImageModel->insert([
                         'property_id' => $propertyId,
                         'image' => $imageName,
+                    ]);
+                }
+            }
+        }
+
+        $videos = $this->request->getFiles();
+        if (isset($videos['property_videos'])) {
+            foreach ($videos['property_videos'] as $file) {
+                if ($file->isValid() && !$file->hasMoved()) {
+                    $newName = $file->getRandomName();
+                    $file->move('uploads/properties/videos/', $newName);
+                    $this->propertyVideoModel->insert([
+                        'property_id' => $propertyId,
+                        'video'       => $newName,
                     ]);
                 }
             }
@@ -501,6 +518,7 @@ class AdminController extends BaseController
 
         // Fetch related images
         $images = $this->propertyImageModel->where('property_id', $id)->findAll();
+        $videos = $this->propertyVideoModel->where('property_id', $id)->findAll();
         $masterPlans = $this->masterPlanModel->where('property_id', $id)->findAll();
 
         // Fetch all floor plans
@@ -558,6 +576,7 @@ class AdminController extends BaseController
             'name' => $user['username'] ?? 'Admin',
             'property' => $property,
             'propertyImages' => $images,
+            'propertyVideos' => $videos,
             'masterPlans' => $masterPlans,
             'floorPlans' => $floorPlans,
             'grouped_amenities' => $grouped_amenities,
@@ -570,9 +589,6 @@ class AdminController extends BaseController
 
         return view('admin/layout/templates', $data);
     }
-
-
-
     public function update_property($id)
     {
         helper(['form', 'url']);
@@ -647,6 +663,36 @@ class AdminController extends BaseController
                     'property_id' => $id,
                     'image' => $imageName,
                 ]);
+            }
+        }
+        /**
+         * Property Videos Upload
+         */
+        $videoFiles = $this->request->getFiles()['property_videos'] ?? null;
+        $videoPath  = FCPATH . 'uploads/properties/videos/';
+
+        // Create directory if not exists
+        if (!is_dir($videoPath)) {
+            mkdir($videoPath, 0755, true);
+        }
+
+        // If videos are uploaded
+        if ($videoFiles) {
+            // Normalize single file to array
+            if (!is_array($videoFiles)) {
+                $videoFiles = [$videoFiles];
+            }
+
+            foreach ($videoFiles as $file) {
+                if ($file && $file->isValid() && !$file->hasMoved()) {
+                    $videoName = $file->getRandomName();
+                    $file->move($videoPath, $videoName);
+
+                    $this->propertyVideoModel->insert([
+                        'property_id' => $id,
+                        'video'       => $videoName,
+                    ]);
+                }
             }
         }
 
@@ -869,8 +915,29 @@ class AdminController extends BaseController
 
         return redirect()->to('/admin/properties')->with('success', 'Property updated successfully.');
     }
+    public function deleteVideo($id)
+    {
+        $video = $this->propertyVideoModel->find($id);
 
+        if (!$video) {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'message' => 'Video not found.'
+            ]);
+        }
 
+        $filePath = FCPATH . 'uploads/properties/videos/' . $video['video'];
+        if (is_file($filePath)) {
+            unlink($filePath);
+        }
+
+        $this->propertyVideoModel->delete($id);
+
+        return $this->response->setJSON([
+            'status'  => 'success',
+            'message' => 'Video deleted successfully.'
+        ]);
+    }
 
 
     public function delete_property_image($imageId)

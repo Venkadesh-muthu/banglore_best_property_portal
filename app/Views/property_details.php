@@ -114,7 +114,11 @@ $bgImage = !empty($images) && count($images) > 0
                                 <i class="bi bi-images me-1"></i> Gallery
                             </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link px-3 py-2" data-bs-toggle="tab" href="#main_videos">
+                                <i class="bi bi-images me-1"></i> Videos
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link px-3 py-2" data-bs-toggle="tab" href="#main_developer"><i
                                     class="bi bi-person-badge me-1"></i> Developer</a>
@@ -842,6 +846,32 @@ $amenity_images = [
                         <?php endforeach; ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
+            <?php endif; ?>
+
+        </div>
+    </div>
+</div>
+<div class="tab-pane fade" id="main_videos">
+    <div class="container py-4">
+        <h4 class="fw-bold mb-4 text-primary">Videos</h4>
+        <div class="row g-3">
+
+            <!-- Property Videos -->
+            <?php if (!empty($videos)): ?>
+                <?php foreach ($videos as $vid): ?>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="card border-0 shadow-sm p-2">
+                            <video class="w-100 rounded" height="200" controls>
+                                <source src="<?= base_url('uploads/properties/videos/' . esc($vid['video'])) ?>" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="col-12 text-muted">
+                    <p>No videos uploaded for this property.</p>
+                </div>
             <?php endif; ?>
 
         </div>

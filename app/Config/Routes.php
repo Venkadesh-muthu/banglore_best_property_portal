@@ -33,6 +33,7 @@ $routes->group('admin', function ($routes) {
     $routes->post('property/update/(:num)', 'AdminController::update_property/$1');
     $routes->delete('property/delete/(:num)', 'AdminController::delete_property/$1');
     $routes->get('property/images/(:num)', 'AdminController::view_property_images/$1');
+    $routes->delete('properties/delete-video/(:num)', 'AdminController::deleteVideo/$1');
     $routes->post('property/image/delete/(:num)', 'AdminController::delete_property_image/$1');
     $routes->delete('delete_master_plan/(:num)', 'AdminController::delete_master_plan/$1');
     $routes->delete('delete_floor_plan/(:num)', 'AdminController::delete_floor_plan/$1');

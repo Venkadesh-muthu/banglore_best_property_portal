@@ -149,13 +149,13 @@
                                         <div class="col-6">
                                             <label class="form-label">Start Price (₹)</label>
                                             <input type="text" name="start_price" id="startPrice" class="form-control"
-                                            value="<?= esc(number_format($property['start_price'], 0, '', ',')) ?>">
+                                            value="<?= esc(number_format(is_numeric($property['start_price']) ? (float) $property['start_price'] : 0, 0, '', ',')) ?>">
                                             <small id="startPriceError" class="text-danger"></small>
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label">End Price (₹)</label>
                                             <input type="text" name="end_price" id="endPrice" class="form-control"
-                                            value="<?= esc(number_format($property['end_price'], 0, '', ',')) ?>">
+                                            value="<?= esc(number_format(is_numeric($property['end_price']) ? (float) $property['end_price'] : 0, 0, '', ',')) ?>">
                                             <small id="endPriceError" class="text-danger"></small>
                                         </div>
                                     </div>
@@ -235,6 +235,32 @@
                     }
                 ?>
                                             </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label">Upload New Videos (Max 2)</label>
+                                            <input type="file" class="form-control file-upload-check" 
+                                                name="property_videos[]" id="videos" 
+                                                multiple accept="video/*" 
+                                                onchange="limitVideoSelection(this)">
+                                            <small class="text-muted">Leave empty if no new videos.</small>
+                                        </div>
+
+                                        <div class="row mt-3">
+                                            <?php if (!empty($propertyVideos)): ?>
+                                                <?php foreach ($propertyVideos as $video): ?>
+                                                    <div class="col-md-4 col-sm-6 position-relative video-wrapper" id="video-<?= $video['id'] ?>">
+                                                        <video class="img-fluid rounded border" controls style="width:100%; height:200px; object-fit:cover;">
+                                                            <source src="<?= base_url('uploads/properties/videos/' . $video['video']) ?>" type="video/mp4">
+                                                            Your browser does not support HTML5 video.
+                                                        </video>
+                                                        <!-- Remove button -->
+                                                        <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1" 
+                                                            onclick="deleteVideo(<?= $video['id'] ?>)">
+                                                            &times;
+                                                        </button>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                     <div class="row mt-3">
@@ -1203,4 +1229,34 @@
   startInput.addEventListener('input', validatePrices);
   endInput.addEventListener('input', validatePrices);
   window.addEventListener('DOMContentLoaded', validatePrices);
+</script>
+<script>
+function limitVideoSelection(input) {
+    if (input.files.length > 2) {
+        alert('You can upload a maximum of 2 videos.');
+        input.value = ''; // clear selection
+    }
+}
+
+function deleteVideo(videoId) {
+    if (!confirm('Are you sure you want to delete this video?')) return;
+
+    fetch("<?= base_url('admin/properties/delete-video') ?>/" + videoId, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: '_method=DELETE' // tells CI4 to treat as DELETE
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            document.getElementById('video-' + videoId).remove();
+        } else {
+            alert(data.message || 'Failed to delete video. Please try again.');
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert('Error deleting video.');
+    });
+}
 </script>

@@ -33,53 +33,60 @@
                         <?php endif; ?>
 
                         <!-- Table with stripped rows -->
-                        <table class="table table-striped">
-                            <thead>
-                                <tr class="text-center">
-                                    <th>No.</th>
-                                    <th>Property Name</th>
-                                    <th>Location</th>
-                                    <th>Starting Price</th>
-                                    <th>Ending Price</th>
-                                    <th>Type</th>
-                                    <th>Type Details</th>
-                                    <th>Possession Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php $serial = 1 + ($perPage * ($currentPage - 1)); ?>
-                                <?php if (!empty($properties)): ?>
-                                    <?php foreach ($properties as $property): ?>
-                                        <tr class="text-center">
-                                            <td><?= $serial++ ?></td>
-                                            <td><?= esc($property['name']) ?></td>
-                                            <td><?= esc($property['location']) ?></td>
-                                            <td><?= esc($property['start_price']) ?></td>
-                                            <td><?= esc($property['end_price']) ?></td>
-                                            <td><?= esc($property['property_type']) ?></td>
-                                            <td><?= esc($property['property_type_detail']) ?></td>
-                                            <td><?= esc($property['possession_date']) ?></td>
-                                            <td>
-                                                <a href="<?= base_url('admin/property/edit/' . $property['id']) ?>"
-                                                    class="btn btn-sm btn-success">Edit</a>
-                                                <button class="btn btn-sm btn-info view-images-btn"
-                                                    data-id="<?= $property['id'] ?>" data-bs-toggle="modal"
-                                                    data-bs-target="#imageModal">View Images</button>
-                                                <button class="btn btn-sm btn-danger delete-btn"
-                                                    data-id="<?= $property['id'] ?>">Delete</button>
-                                            </td>
-
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <tr>
-                                        <td colspan="8" class="text-center">No properties found.</td>
+                         <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>No.</th>
+                                        <th>Property Name</th>
+                                        <th>Location</th>
+                                        <th>Starting Price</th>
+                                        <th>Ending Price</th>
+                                        <th>Type</th>
+                                        <th>Type Details</th>
+                                        <th>Possession Date</th>
+                                        <th colspan="3">Actions</th>
                                     </tr>
-                                <?php endif; ?>
-                            </tbody>
+                                </thead>
+                                <tbody>
+                                    <?php $serial = 1 + ($perPage * ($currentPage - 1)); ?>
+                                    <?php if (!empty($properties)): ?>
+                                        <?php foreach ($properties as $property): ?>
+                                            <tr class="text-center">
+                                                <td><?= $serial++ ?></td>
+                                                <td><?= esc($property['name']) ?></td>
+                                                <td><?= esc($property['location']) ?></td>
+                                                <td><?= esc($property['start_price']) ?></td>
+                                                <td><?= esc($property['end_price']) ?></td>
+                                                <td><?= esc($property['property_type']) ?></td>
+                                                <td><?= esc($property['property_type_detail']) ?></td>
+                                                <td><?= esc($property['possession_date']) ?></td>
+                                               <td>
+                                                    <a href="<?= base_url('admin/property/edit/' . $property['id']) ?>" 
+                                                    class="btn btn-sm btn-success">Edit</a>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-info view-images-btn" 
+                                                            data-id="<?= $property['id'] ?>" 
+                                                            data-bs-toggle="modal" 
+                                                            data-bs-target="#imageModal">View Images</button>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-danger delete-btn" 
+                                                            data-id="<?= $property['id'] ?>">Delete</button>
+                                                </td>
 
-                        </table>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="8" class="text-center">No properties found.</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+
+                            </table>
+                         </div>
                         <!-- End Table with stripped rows -->
                         <div class="datatable-bottom">
                             <div class="datatable-info">
