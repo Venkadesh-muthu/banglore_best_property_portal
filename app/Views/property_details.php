@@ -859,14 +859,30 @@ $amenity_images = [
             <!-- Property Videos -->
             <?php if (!empty($videos)): ?>
                 <?php foreach ($videos as $vid): ?>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="card border-0 shadow-sm p-2">
-                            <video class="w-100 rounded" height="200" controls>
-                                <source src="<?= base_url('uploads/properties/videos/' . esc($vid['video'])) ?>" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
+                    <?php
+                        // Extract YouTube video ID (supports shorts, watch, embed, youtu.be)
+                        preg_match(
+                            '/(?:youtu\.be\/|youtube\.com\/(?:shorts\/|watch\?v=|embed\/|v\/|.*[?&]v=))([a-zA-Z0-9_-]{11})/',
+                            $vid['video'],
+                            $matches
+                        );
+                    $youtubeId = $matches[1] ?? null;
+                    ?>
+                    <?php if ($youtubeId): ?>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="card border-0 shadow-sm p-2">
+                                <div class="ratio ratio-16x9">
+                                    <iframe 
+                                        class="w-100 rounded" 
+                                        src="https://www.youtube.com/embed/<?= esc($youtubeId) ?>" 
+                                        title="YouTube video" 
+                                        frameborder="0" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             <?php else: ?>
                 <div class="col-12 text-muted">

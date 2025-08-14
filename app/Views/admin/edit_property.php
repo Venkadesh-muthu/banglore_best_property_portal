@@ -162,7 +162,7 @@
 
 
                                     <?php
-                                    $propertyType = $property['property_type'] ?? '';
+                                        $propertyType = $property['property_type'] ?? '';
                 $propertyDetail = $property['property_type_detail'] ?? '';
                 $propertyTypeDetails = explode(',', $propertyDetail);
                 ?>
@@ -173,7 +173,7 @@
                                             <select name="property_type" id="property_type" class="form-select">
                                                 <option value="">Select type</option>
                                                 <?php
-                            $types = ['apartment', 'villa', 'plot'];
+                                            $types = ['apartment', 'villa', 'plot'];
                 foreach ($types as $type) {
                     $selected = ($propertyType === $type) ? 'selected' : '';
                     echo '<option value="' . $type . '" ' . $selected . '>' . ucfirst($type) . '</option>';
@@ -183,7 +183,7 @@
 
                                             <!-- Apartment Types -->
                                             <?php
-                                            $apartmentTypes = ['Studio', '1BHK', '1.5BHK', '2BHK', '2.5BHK', '3BHK', '3.5BHK', '4BHK', '4.5BHK', '5BHK'];
+                $apartmentTypes = ['Studio', '1BHK', '1.5BHK', '2BHK', '2.5BHK', '3BHK', '3.5BHK', '4BHK', '4.5BHK', '5BHK'];
                 ?>
                                             <div id="apartmentTypes" class="mt-2" style="display: none;">
                                                 <label class="form-label d-block">Apartment Type</label>
@@ -236,16 +236,36 @@
                 ?>
                                             </div>
                                         </div>
-                                        <div class="col-6">
-                                            <label class="form-label">Upload New Videos (Max 2)</label>
-                                            <input type="file" class="form-control file-upload-check" 
-                                                name="property_videos[]" id="videos" 
-                                                multiple accept="video/*" 
-                                                onchange="limitVideoSelection(this)">
-                                            <small class="text-muted">Leave empty if no new videos.</small>
-                                        </div>
+                                    <div class="col-6">
+    <label class="form-label">YouTube Video Links (Max 2)</label>
 
-                                        <div class="row mt-3">
+    <?php
+    $maxLinks = 2;
+                $existingVideos = !empty($propertyVideos) ? $propertyVideos : [];
+
+                // Show existing videos in input fields
+                for ($i = 0; $i < $maxLinks; $i++):
+                    // Extract 'id' and 'video' if exists, else empty
+                    $videoId = isset($existingVideos[$i]['id']) ? $existingVideos[$i]['id'] : '';
+                    $videoUrl = isset($existingVideos[$i]['video']) ? $existingVideos[$i]['video'] : '';
+                    ?>
+        <!-- Hidden field to store video ID -->
+        <input type="hidden" name="property_video_ids[]" value="<?= esc($videoId) ?>">
+
+        <!-- URL input field for video -->
+        <input type="url" class="form-control mb-2"
+               name="property_videos[]"
+               placeholder="Enter YouTube video URL <?= $i + 1 ?>"
+               value="<?= esc($videoUrl) ?>">
+    <?php endfor; ?>
+
+    <small class="text-muted">Leave empty if no new videos.</small>
+</div>
+
+
+
+
+                                        <!-- <div class="row mt-3">
                                             <?php if (!empty($propertyVideos)): ?>
                                                 <?php foreach ($propertyVideos as $video): ?>
                                                     <div class="col-md-4 col-sm-6 position-relative video-wrapper" id="video-<?= $video['id'] ?>">
@@ -253,7 +273,7 @@
                                                             <source src="<?= base_url('uploads/properties/videos/' . $video['video']) ?>" type="video/mp4">
                                                             Your browser does not support HTML5 video.
                                                         </video>
-                                                        <!-- Remove button -->
+                                                        
                                                         <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1" 
                                                             onclick="deleteVideo(<?= $video['id'] ?>)">
                                                             &times;
@@ -261,7 +281,7 @@
                                                     </div>
                                                 <?php endforeach; ?>
                                             <?php endif; ?>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="row mt-3">
                                         <div class="col-6">
@@ -509,23 +529,23 @@
                                 <div class="tab-pane fade show active" id="pills-lifestyle" role="tabpanel">
                                     <div class="row">
                                         <?php
-                                        $lifestyleItems = [
-                                            'Pet Park',
-                                            'Supermarket',
-                                            'Pharmacy/Clinic',
-                                            'Library',
-                                            'Sauna',
-                                            'Amphitheatre',
-                                            'Swimming Pool',
-                                            'Gym - Indoor',
-                                            'Gym - Outdoor',
-                                            'Cafe/Restaurant',
-                                            'Jacuzzi',
-                                            'Kids Play Area',
-                                            'Salon',
-                                            'Play School',
-                                            'Heated Pool'
-                                        ];
+                                            $lifestyleItems = [
+                                                'Pet Park',
+                                                'Supermarket',
+                                                'Pharmacy/Clinic',
+                                                'Library',
+                                                'Sauna',
+                                                'Amphitheatre',
+                                                'Swimming Pool',
+                                                'Gym - Indoor',
+                                                'Gym - Outdoor',
+                                                'Cafe/Restaurant',
+                                                'Jacuzzi',
+                                                'Kids Play Area',
+                                                'Salon',
+                                                'Play School',
+                                                'Heated Pool'
+                                            ];
 
                 $selectedLifestyle = [];
                 $rareLifestyle = [];

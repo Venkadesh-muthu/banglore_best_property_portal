@@ -277,18 +277,19 @@
                                             </div>
 
                                         </div>
-                                        <div class="col-md-6">
-                                        <label for="property_videos" class="form-label">Videos (Max 2)</label>
-                                        <input 
-                                            type="file" 
-                                            class="form-control file-upload-check"
-                                            name="property_videos[]" 
-                                            id="property_videos" 
-                                            multiple 
-                                            accept="video/*"
-                                            onchange="limitPropertyVideos(this)">
-                                        <small class="text-muted">You can upload up to 2 videos only.</small>
-                                    </div>
+                                        <div class="col-6">
+                                                <label class="form-label">YouTube Video Links (Max 2)</label>
+
+                                                <input type="url" class="form-control mb-2"
+                                                    name="property_videos[]"
+                                                    placeholder="Enter YouTube video URL 1">
+                                                <input type="url" class="form-control"
+                                                    name="property_videos[]"
+                                                    placeholder="Enter YouTube video URL 2">
+
+                                                <small class="text-muted">Leave empty if no new videos.</small>
+                                            </div>
+
 
                                     </div>
                                     <div class="row mt-3">

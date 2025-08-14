@@ -278,19 +278,25 @@ class AdminController extends BaseController
             }
         }
 
-        $videos = $this->request->getFiles();
-        if (isset($videos['property_videos'])) {
-            foreach ($videos['property_videos'] as $file) {
-                if ($file->isValid() && !$file->hasMoved()) {
-                    $newName = $file->getRandomName();
-                    $file->move('uploads/properties/videos/', $newName);
+        // Get submitted YouTube links from the form
+        $videoLinks = $this->request->getPost('property_videos'); // array of URLs
+        $maxLinks = 2;
+
+        if (!empty($videoLinks) && is_array($videoLinks)) {
+            // Limit to max 2 links and remove empty values
+            $videoLinks = array_slice(array_filter($videoLinks), 0, $maxLinks);
+
+            foreach ($videoLinks as $link) {
+                $link = trim($link);
+                if (!empty($link)) {
                     $this->propertyVideoModel->insert([
-                        'property_id' => $propertyId,
-                        'video'       => $newName,
+                        'property_id' => $propertyId, // make sure this is the actual property ID
+                        'video'       => $link // store the YouTube URL
                     ]);
                 }
             }
         }
+
 
         // Handle multiple master plan image uploads
         $masterPlanImages = $this->request->getFileMultiple('master_plan_image');
@@ -665,36 +671,36 @@ class AdminController extends BaseController
                 ]);
             }
         }
-        /**
-         * Property Videos Upload
-         */
-        $videoFiles = $this->request->getFiles()['property_videos'] ?? null;
-        $videoPath  = FCPATH . 'uploads/properties/videos/';
+        $videoLinks = $this->request->getPost('property_videos');
+        $videoIds   = $this->request->getPost('property_video_ids'); // IDs from hidden fields
+        $propertyId = $id; // The actual property ID you are editing
 
-        // Create directory if not exists
-        if (!is_dir($videoPath)) {
-            mkdir($videoPath, 0755, true);
-        }
+        if (!empty($videoLinks) && is_array($videoLinks)) {
+            foreach ($videoLinks as $key => $link) {
+                $link = trim($link);
+                $videoId = isset($videoIds[$key]) ? $videoIds[$key] : null;
 
-        // If videos are uploaded
-        if ($videoFiles) {
-            // Normalize single file to array
-            if (!is_array($videoFiles)) {
-                $videoFiles = [$videoFiles];
-            }
-
-            foreach ($videoFiles as $file) {
-                if ($file && $file->isValid() && !$file->hasMoved()) {
-                    $videoName = $file->getRandomName();
-                    $file->move($videoPath, $videoName);
-
-                    $this->propertyVideoModel->insert([
-                        'property_id' => $id,
-                        'video'       => $videoName,
-                    ]);
+                if (!empty($link)) {
+                    if (!empty($videoId)) {
+                        // Update existing video
+                        $this->propertyVideoModel->update($videoId, ['video' => $link]);
+                    } else {
+                        // Insert new video
+                        $this->propertyVideoModel->insert([
+                            'property_id' => $propertyId, // Use the property ID here
+                            'video'       => $link
+                        ]);
+                    }
+                } else {
+                    if (!empty($videoId)) {
+                        // Delete if existing video was cleared
+                        $this->propertyVideoModel->delete($videoId);
+                    }
                 }
             }
         }
+
+
 
         /**
          * Master Plan Upload
