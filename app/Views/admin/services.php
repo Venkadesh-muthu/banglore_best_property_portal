@@ -34,12 +34,12 @@
                     <thead class="table-light ">
                         <tr>
                             <th>#</th>
-                            <th>Icon</th>
+                            <!-- <th>Icon</th> -->
                             <th>Title</th>
                             <th>Description</th>
                             <th>Created At</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            <th colspan="2">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,13 +49,13 @@
                                 <tr>
                                     <td><?= $i++ ?></td>
 
-                                    <td>
+                                    <!-- <td>
                                         <?php if (!empty($s['icon'])): ?>
                                             <img src="<?= base_url('uploads/icons/' . $s['icon']) ?>" alt="Icon" width="40" height="40">
                                         <?php else: ?>
                                             <span class="text-muted">No Icon</span>
                                         <?php endif; ?>
-                                    </td>
+                                    </td> -->
 
                                     <td><?= esc($s['title']) ?></td>
 
@@ -68,7 +68,9 @@
                                     </td>
 
                                     <td>
-                                        <a href="<?= base_url('admin/edit-service/' . $s['id']) ?>" class="btn btn-sm btn-success">Edit</a>
+                                        <a href="<?= base_url('admin/edit-service/' . $s['id']) ?>" class="btn btn-sm btn-info">Edit</a>
+                                    </td>
+                                    <td>
                                         <button data-id="<?= $s['id'] ?>" class="btn btn-sm btn-danger delete-service-btn">Delete</button>
                                     </td>
                                 </tr>

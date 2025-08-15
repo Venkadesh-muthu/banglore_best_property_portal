@@ -42,10 +42,10 @@
                                            placeholder="e.g., rera-registration-assistance" value="<?= old('slug') ?>">
                                 </div>
 
-                                <div class="col-md-6">
+                                <!-- <div class="col-md-6">
                                     <label for="icon" class="form-label">Service Icon/Image</label>
                                     <input type="file" class="form-control file-upload-check" name="icon" id="icon" accept="image/*">
-                                </div>
+                                </div> -->
 
                                 <div class="col-md-6">
                                     <label for="image" class="form-label">Main Service Image</label>

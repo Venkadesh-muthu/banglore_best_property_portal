@@ -32,13 +32,13 @@
                                 </div>
 
                                 <!-- Icons -->
-                                <div class="col-md-6">
+                                <!-- <div class="col-md-6">
                                     <label class="form-label">Service Icon</label>
                                     <input type="file" class="form-control file-upload-check" name="icon" accept="image/*">
                                     <?php if (!empty($service['icon'])): ?>
                                         <img src="<?= base_url('uploads/icons/' . $service['icon']) ?>" class="mt-2" height="50">
                                     <?php endif; ?>
-                                </div>
+                                </div> -->
 
                                 <div class="col-md-6">
                                     <label class="form-label">Main Image</label>

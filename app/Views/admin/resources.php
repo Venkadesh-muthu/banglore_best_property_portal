@@ -55,7 +55,7 @@
                                     <td><?= esc($r['category']) ?></td>
                                     <td><?= $r['status'] == 'active' ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-secondary">Inactive</span>' ?></td>
                                     <td>
-                                        <a href="<?= base_url('admin/edit-resource/' . $r['id']) ?>" class="btn btn-sm btn-success">Edit</a>
+                                        <a href="<?= base_url('admin/edit-resource/' . $r['id']) ?>" class="btn btn-sm btn-info">Edit</a>
                                         <button data-id="<?= $r['id'] ?>" class="btn btn-sm btn-danger delete-resource-btn">Delete</button>
                                     </td>
                                 </tr>

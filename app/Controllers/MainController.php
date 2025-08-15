@@ -496,6 +496,7 @@ class MainController extends BaseController
         // Fetch related developer for this property
         $developer = $this->developerModel->where('property_id', $id)->first();
         $resources = $this->resourceModel->where('status', 'active')->orderBy('id', 'DESC')->findAll(5);
+        $services = $this->serviceModel->where('status', 1)->findAll();
         $data = [
             'title' => $property['name'],
             'content' => 'property_details',
@@ -510,6 +511,7 @@ class MainController extends BaseController
             // 'microMarketDocuments' => $microMarketDocuments,
             // 'microMarketSection' => $microMarketSection,
             'developer' => $developer,
+            'services' => $services,
             'resources'  => $resources,
         ];
 
