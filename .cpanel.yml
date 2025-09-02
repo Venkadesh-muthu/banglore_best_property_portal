@@ -1,4 +1,4 @@
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/iald0390iizb/public_html/banglore_property_portal
+    - export DEPLOYPATH=/home/iald0390iizb/public_html/propertyportal/
     - /bin/cp -r * $DEPLOYPATH
