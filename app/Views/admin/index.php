@@ -48,7 +48,7 @@
     <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
         data-sidebar-position="fixed" data-header-position="fixed">
         <div class=" position-relative overflow-hidden text-bg-light min-vh-100 d-flex align-items-center
-    justify-content-center" style="background-image: url('<?= base_url('admin-template/assets/img/big-city1.jpg') ?>');
+    justify-content-center" style="background-image: url('<?= base_url('admin-template/assets/img/big-city2.jpg') ?>');
                background-size: cover;
                background-repeat: no-repeat;
                background-position: center;">
