@@ -120,17 +120,22 @@ class AdminController extends BaseController
             return redirect()->to('/admin');
         }
 
-        $adminId = session()->get('admin_id'); // assuming session stores admin_id
+        $adminId = session()->get('admin_id');
         $user = $this->adminModel->find($adminId);
 
+        // Count total properties
+        $totalProperties = $this->propertyModel->countAllResults();
+
         $data = [
-            'title' => 'Dashboard',
-            'name' => $user['username'] ?? 'Admin',
+            'title'   => 'Dashboard',
+            'name'    => $user['username'] ?? 'Admin',
             'content' => 'admin/dashboard',
+            'totalProperties' => $totalProperties, // pass to view
         ];
 
         return view('admin/layout/templates', $data);
     }
+
     public function profile()
     {
         if (!session()->get('isAdminLoggedIn')) {
