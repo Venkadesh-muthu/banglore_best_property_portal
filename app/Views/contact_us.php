@@ -87,7 +87,7 @@
                     <div class="row">
                     <div class="col-12 mb-3">
                         <label for="pdfFile" class="form-label">Upload PDF File</label>
-                        <input type="file" class="form-control" id="pdfFile" name="file" 
+                        <input type="file" class="form-control" id="pdfFile" name="pdf-file" 
                             accept="application/pdf" required />
                     </div>
 
