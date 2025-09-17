@@ -59,28 +59,46 @@
             </div>
 
             <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
-                <form action="#">
-                    <div class="row">
-                        <div class="col-6 mb-3">
-                            <input type="text" class="form-control" placeholder="Your Name" />
-                        </div>
-                        <div class="col-6 mb-3">
-                            <input type="email" class="form-control" placeholder="Your Email" />
-                        </div>
-                        <div class="col-12 mb-3">
-                            <input type="text" class="form-control" placeholder="Subject" />
-                        </div>
-                        <div class="col-12 mb-3">
-                            <textarea name="" id="" cols="30" rows="7" class="form-control"
-                                placeholder="Message"></textarea>
-                        </div>
-
-                        <div class="col-12">
-                            <input type="submit" value="Send Message" class="btn btn-primary" />
-                        </div>
+            <form action="https://srivatech.app.n8n.cloud/webhook/9f4b4c3e-2fee-4f29-944a-9aaeba428bb1" method="POST">
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <input type="text" class="form-control" name="name" placeholder="Your Name" required />
                     </div>
+                    <div class="col-6 mb-3">
+                        <input type="email" class="form-control" name="email" placeholder="Your Email" required />
+                    </div>
+                    <div class="col-12 mb-3">
+                        <input type="text" class="form-control" name="subject" placeholder="Subject" />
+                    </div>
+                    <div class="col-12 mb-3">
+                        <textarea name="message" cols="30" rows="7" class="form-control" placeholder="Message"></textarea>
+                    </div>
+
+                    <div class="col-12">
+                        <input type="submit" value="Send Message" class="btn btn-primary" />
+                    </div>
+                </div>
+            </form>
+            </div>
+            <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+                <form action="https://srivatech.app.n8n.cloud/webhook/upload-file" 
+                        method="POST" enctype="multipart/form-data">
+
+                    <div class="row">
+                    <div class="col-12 mb-3">
+                        <label for="pdfFile" class="form-label">Upload PDF File</label>
+                        <input type="file" class="form-control" id="pdfFile" name="file" 
+                            accept="application/pdf" required />
+                    </div>
+
+                    <div class="col-12">
+                        <input type="submit" value="Upload PDF" class="btn btn-primary" />
+                    </div>
+                    </div>
+                    
                 </form>
             </div>
+
         </div>
     </div>
 </div>
